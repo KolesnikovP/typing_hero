@@ -9,12 +9,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@widgets/*": ["src/widgets/*"],
       "@app/*": ["src/app/*"],
-      "@shared/*": ["src/shared/*"],
+      "@pages/*": ["src/pages/*"],
+      "@widgets/*": ["src/widgets/*"],
       "@features/*": ["src/features/*"],
       "@entities/*": ["src/entities/*"],
-      "@pages/*": ["src/pages/*"],
+      "@shared/*": ["src/shared/*"],
     },
   },
 }
