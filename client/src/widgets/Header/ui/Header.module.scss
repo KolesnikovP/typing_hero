@@ -4,6 +4,15 @@
     /* background: var(--inverted-bg-color); */
     background: gray;
     display: flex;
+    justify-content: space-between;
     align-items: center;
     padding: 20px;
+
+  .HeaderItem {
+    display: flex;
+
+    .MenuItem {
+      margin-right: 5px;
+    }
+  }
 }
