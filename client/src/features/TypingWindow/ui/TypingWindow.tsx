@@ -4,6 +4,7 @@ export function TypingWindow() {
   return (
     <div className={cls.Container} >
       
+      nothing yet
     </div>
   )
 }
