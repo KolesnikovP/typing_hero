@@ -12,7 +12,9 @@
       "@widgets/*": ["src/widgets/*"],
       "@app/*": ["src/app/*"],
       "@shared/*": ["src/shared/*"],
-      "@features/*": ["src/features/*"]
+      "@features/*": ["src/features/*"],
+      "@entities/*": ["src/entities/*"],
+      "@pages/*": ["src/pages/*"],
     },
   },
 }
