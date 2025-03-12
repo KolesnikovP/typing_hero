@@ -1,12 +1,11 @@
 import './App.css'
+import { Header } from '@widgets/Header'
 
 function App() {
 
   return (
     <>
-      <div>
-        Navbar
-      </div>
+     <Header/> 
       <h1>Vite + React</h1>
       <div className="card">
       </div>
