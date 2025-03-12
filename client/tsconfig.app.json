@@ -12,6 +12,7 @@
       "@/*": ["src/*"],
       "@widgets/*": ["src/widgets/*"],
       "@app/*": ["src/app/*"],
+      "@shared/*": ["src/shared/*"],
     },
     /* Bundler mode */
     "moduleResolution": "bundler",
