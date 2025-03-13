@@ -8,7 +8,7 @@ function App() {
     <div className='app'>
      <Header/> 
       <h1>Vite + React</h1>
-      <div className="card">
+      <div className="">
         While routers not exist:
         <TypingWindow/>
       </div>

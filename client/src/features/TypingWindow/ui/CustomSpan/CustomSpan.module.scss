@@ -1,8 +1,14 @@
 .Container {
-  padding: 4px;
-
+  padding: 2px;
+  font-size: var(--font-size-l);
+  color: blue;
+  /* height: 20px;  */
 }
   
 .ActivePointer {
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid black;
+}
+
+.TypedLetter{
+  color: black;
 }
