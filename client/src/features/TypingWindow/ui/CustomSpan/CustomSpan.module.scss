@@ -7,6 +7,11 @@
   
 .ActivePointer {
   border-bottom: 2px solid black;
+  animation-duration: 1.7s;
+  animation-name: pulse;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+
 }
 
 .TypedLetter{
@@ -16,3 +21,24 @@
 .MistakenLetter {
   color: red;
 }
+
+@keyframes pulse {
+    0% {
+        border-bottom: 2px solid rgba(10, 10, 10, 1);
+    }
+    25% {
+        border-bottom: 2px solid rgba(10, 10, 10, 0.6);
+    }
+
+    50% {
+        border-bottom: 2px solid rgba(10, 10, 10, 0.1);
+    }
+    75% {
+        border-bottom: 2px solid rgba(10, 10, 10, 0.6);
+    }
+
+    100% {
+        border-bottom: 2px solid rgba(10, 10, 10, 1);
+    }
+}
+

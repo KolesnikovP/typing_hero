@@ -8,8 +8,8 @@ function App() {
     <div className='app'>
      <Header/> 
       <h1>Vite + React</h1>
-      <div className="">
-        While routers not exist:
+      <div className="" style={{display: 'flex', flexDirection: 'column', alignItems: 'center' ,justifyContent: 'center'}}>
+        <div>While routes not written</div>
         <TypingWindow/>
       </div>
     </div>
