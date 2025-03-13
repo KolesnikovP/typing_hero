@@ -7,9 +7,16 @@ const mockedText = getMockedTypingText()
 const ignoreKeysList: Set<string> = new Set(['Shift', 'Control', 'Meta', 'Alt', 'Tab'])
 export function TypingWindow() {
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
+  const [mistakenIndexes, setMistakenIndexes] = useState(new Set<number>());
+
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
     if(!ignoreKeysList.has(e.key)) {
-      setCurrentLetterIndex(prev => prev + 1)
+      if(e.key !== mockedText[currentLetterIndex]) {
+        console.log('event: ' + e.key, 'target: ' + mockedText[currentLetterIndex])
+        setMistakenIndexes(prev => new Set(prev).add(currentLetterIndex))
+      } else {
+        setCurrentLetterIndex(prev => prev + 1)
+      }
     } 
 
     console.log('key pressed down>>>> ', e.key)
@@ -22,6 +29,7 @@ export function TypingWindow() {
             key={index}
             isPointerOn={index === currentLetterIndex }
             isTyped={currentLetterIndex <= index}
+            isMistakenKey={mistakenIndexes.has(index)} // ✅ Check if this index was mistaken
           >
             {el === ' ' ? '\u00A0' : el}
           </CustomSpan>
