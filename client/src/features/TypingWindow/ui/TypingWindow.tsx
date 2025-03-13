@@ -4,7 +4,7 @@ import cls from './TypingWindow.module.scss'
 
 export function TypingWindow() {
   return (
-    <div className={cls.Container} >
+    <div className={cls.Container} tabIndex={0} onKeyUp={onKeyDownHandler} >
       {getMockedTypingText().map((el, index) => (
         <>  
           <CustomSpan key={index} isPointerOn={index === 15 || index === 16 }>
@@ -15,5 +15,9 @@ export function TypingWindow() {
       ))}
     </div>
   )
+}
+
+function onKeyDownHandler(){
+  console.log('key pressed down')
 }
 
