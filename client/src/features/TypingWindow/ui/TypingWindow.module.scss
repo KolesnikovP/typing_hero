@@ -4,9 +4,10 @@
   flex-wrap: wrap;
   align-content: flex-start;
 /* TODO: remove it. just temporary  */
-  height: 500px;
-  width: 700px;
+  height: 200px;
+  width: 600px;
   /* justify-content: center; */
   /* align-items: center; */
   background: gray;
+  overflow: hidden;
 }
