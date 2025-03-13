@@ -1,0 +1,18 @@
+.Container {
+  padding: 2px;
+  font-size: var(--font-size-l);
+  color: blue;
+  /* height: 20px;  */
+}
+  
+.ActivePointer {
+  border-bottom: 2px solid black;
+}
+
+.TypedLetter{
+  color: black;
+}
+
+.MistakenLetter {
+  color: red;
+}

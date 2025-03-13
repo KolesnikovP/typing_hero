@@ -1,8 +1,12 @@
 .Container {
+  padding: 15px;
   display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
 /* TODO: remove it. just temporary  */
   height: 500px;
-  justify-content: center;
-  align-items: center;
+  width: 700px;
+  /* justify-content: center; */
+  /* align-items: center; */
   background: gray;
 }
