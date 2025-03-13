@@ -4,13 +4,15 @@ import { CustomSpan } from './CustomSpan/CustomSpan'
 import cls from './TypingWindow.module.scss'
 
 const mockedText = getMockedTypingText()
-
+const ignoreKeysList: Set<string> = new Set(['Shift', 'Control', 'Meta', 'Alt', 'Tab'])
 export function TypingWindow() {
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
-    
+    if(!ignoreKeysList.has(e.key)) {
+      setCurrentLetterIndex(prev => prev + 1)
+    } 
+
     console.log('key pressed down>>>> ', e.key)
-    setCurrentLetterIndex(prev => prev + 1)
   }
   return (
     <div className={cls.Container} tabIndex={0} onKeyDown={onKeyDownHandler} >
@@ -28,5 +30,4 @@ export function TypingWindow() {
     </div>
   )
 }
-
 
