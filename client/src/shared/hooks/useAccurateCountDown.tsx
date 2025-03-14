@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
-
-export default function useAccurateCountdown(initialTime: number) {
+type UseAccurateCountDownReturnType = {
+  timeLeft: number,
+  isRunning: boolean,
+  startCountdown: () => void,
+  resetCountdown: () => void,
+}
+export default function useAccurateCountdown(initialTime: number): UseAccurateCountDownReturnType {
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
 
@@ -20,6 +25,11 @@ export default function useAccurateCountdown(initialTime: number) {
       if (newTimeLeft > 0) {
         animationFrameId = requestAnimationFrame(tick);
       }
+
+      // experement
+      if (newTimeLeft === 0) {
+        setIsRunning(false)
+      }
     };
 
     animationFrameId = requestAnimationFrame(tick);
@@ -33,5 +43,5 @@ export default function useAccurateCountdown(initialTime: number) {
     setIsRunning(false);
   };
 
-  return { timeLeft, startCountdown, resetCountdown };
+  return { timeLeft, startCountdown, resetCountdown, isRunning };
 }
