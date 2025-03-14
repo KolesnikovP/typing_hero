@@ -2,6 +2,7 @@ import { FocusEventHandler, KeyboardEvent, useEffect, useRef, useState } from 'r
 import { getMockedTypingText } from '../mockText'
 import { CustomSpan } from './CustomSpan/CustomSpan'
 import cls from './TypingWindow.module.scss'
+import { classNames } from '@/shared/lib/classNames/classNames'
 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 const filler = Array(200).fill(' ')
@@ -14,12 +15,16 @@ export function TypingWindow() {
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
 
+/* set focus on the typing div when component mounted */
   useEffect(()=> {
-    containerRef?.current?.focus()
+    const container = containerRef.current;
+    
+    if(!container) return;
 
-    console.log(containerRef?.current === document.activeElement, 'focus effect')
+    container.focus();
   }, []);
 
+  /* sroll content inside of div */
   useEffect(() => {
     if (containerRef.current && spanRefs.current[currentLetterIndex]) {
       const container = containerRef.current
@@ -38,8 +43,16 @@ export function TypingWindow() {
   }, [currentLetterIndex])
 
   function onFocusHandler(e: FocusEventHandler<HTMLDivElement>) {
-    console.log(e.name, 'on focus handler')
+    setIsFocusOnDiv(true);
   }
+
+  function onBlurHandler() {
+    setIsFocusOnDiv(false)
+  }
+
+/* if the div lost focus let a user know by bluring it */
+  const mods = {[cls.blured]: !isFocusOnDiv}
+  useEffect(()=> console.log(isFocusOnDiv, 'is focused on div'), [isFocusOnDiv])
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
     // console.log(containerRef.current?.clientHeight)
@@ -69,8 +82,9 @@ export function TypingWindow() {
   return (
     <div
       onFocus={onFocusHandler}
+      onBlur={onBlurHandler}
       ref={containerRef}
-      className={cls.Container}
+      className={classNames(cls.Container, mods, [])}
       tabIndex={0}
       onKeyDown={onKeyDownHandler}
     >
