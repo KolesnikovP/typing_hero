@@ -21,10 +21,11 @@ export function TypingWindow() {
     
     if(!container) return;
 
-    container.focus();
+    setTimeout(() => container.focus(), 0);
   }, []);
 
   /* sroll content inside of div */
+/*
   useEffect(() => {
     if (containerRef.current && spanRefs.current[currentLetterIndex]) {
       const container = containerRef.current
@@ -41,8 +42,8 @@ export function TypingWindow() {
       }
     }
   }, [currentLetterIndex])
-
-  function onFocusHandler(e: FocusEventHandler<HTMLDivElement>) {
+*/
+  function onFocusHandler() {
     setIsFocusOnDiv(true);
   }
 
@@ -55,18 +56,15 @@ export function TypingWindow() {
   useEffect(()=> console.log(isFocusOnDiv, 'is focused on div'), [isFocusOnDiv])
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
-    // console.log(containerRef.current?.clientHeight)
-    // const currentSpan = spanRefs.current[currentLetterIndex]?.offsetTop
-    // console.log('span >>> ', currentSpan, currentLetterIndex)
     if(!ignoreKeysList.has(e.key)) {
       if(e.key !== mockedText[currentLetterIndex]) {
         setMistakenIndexes(prev => new Set(prev).add(currentLetterIndex))
         // Scroll to the currently typed letter
-        // spanRefs.current[currentLetterIndex]?.scrollIntoView({
-          // behavior: 'smooth',
-          // block: 'center',
-          // inline: "start",
-        // })
+        spanRefs.current[currentLetterIndex]?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
+          inline: "start",
+        })
 
         if(currentLetterIndex < mockedText.length) {
           setCurrentLetterIndex(prev => prev + 1)
@@ -80,6 +78,8 @@ export function TypingWindow() {
   }
 
   return (
+    <div className={cls.TypingWindow}>
+      {!isFocusOnDiv && <div onClick={() => containerRef?.current?.focus()} className={cls.focusPopup}>Press here to return focus</div>}
     <div
       onFocus={onFocusHandler}
       onBlur={onBlurHandler}
@@ -100,6 +100,7 @@ export function TypingWindow() {
           </CustomSpan>
       ))}
     </div>
+</div>
   )
 }
 
