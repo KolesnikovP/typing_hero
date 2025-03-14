@@ -4,11 +4,12 @@
   flex-wrap: wrap;
   align-content: flex-start;
 /* TODO: remove it. just temporary  */
-  height: 100px;
-  width: 400px;
+  height: 250px;
+  width: 700px;
   /* justify-content: center; */
   /* align-items: center; */
-  background: gray;
+  /* background: #415a77; */
+  background: var(--bg-color);
   overflow: hidden;
   overflowY: 'auto';
 }

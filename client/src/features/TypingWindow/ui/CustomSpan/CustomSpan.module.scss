@@ -1,12 +1,13 @@
 .Container {
   padding: 2px;
-  font-size: var(--font-size-l);
-  color: blue;
+  margin-bottom: 25px;
+  font-size: var(--font-size-xl);
+  color: var(--secondary-color);
   /* height: 20px;  */
 }
   
 .ActivePointer {
-  border-bottom: 2px solid black;
+  border-bottom: 2px solid var(--secondary-color);
   animation-duration: 1.7s;
   animation-name: pulse;
   animation-iteration-count: infinite;
@@ -15,30 +16,27 @@
 }
 
 .TypedLetter{
-  color: black;
+  color: var(--primary-color);
 }
 
 .MistakenLetter {
-  color: red;
+  color: #f28482;
 }
 
 @keyframes pulse {
-    0% {
-        border-bottom: 2px solid rgba(10, 10, 10, 1);
-    }
-    25% {
-        border-bottom: 2px solid rgba(10, 10, 10, 0.6);
-    }
-
-    50% {
-        border-bottom: 2px solid rgba(10, 10, 10, 0.1);
-    }
-    75% {
-        border-bottom: 2px solid rgba(10, 10, 10, 0.6);
-    }
-
-    100% {
-        border-bottom: 2px solid rgba(10, 10, 10, 1);
-    }
+  0% {
+    border-bottom: 2px solid rgba(var(--secondary-color-rgb), 1);
+  }
+  25% {
+    border-bottom: 2px solid rgba(var(--secondary-color-rgb), 0.6);
+  }
+  50% {
+    border-bottom: 2px solid rgba(var(--secondary-color-rgb), 0.1);
+  }
+  75% {
+    border-bottom: 2px solid rgba(var(--secondary-color-rgb), 0.6);
+  }
+  100% {
+    border-bottom: 2px solid rgba(var(--secondary-color-rgb), 1);
+  }
 }
-
