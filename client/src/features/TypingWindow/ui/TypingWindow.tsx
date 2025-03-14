@@ -1,4 +1,4 @@
-import { FocusEventHandler, KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { getMockedTypingText } from '../mockText'
 import { CustomSpan } from './CustomSpan/CustomSpan'
 import cls from './TypingWindow.module.scss'
@@ -15,17 +15,17 @@ export function TypingWindow() {
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
 
-/* set focus on the typing div when component mounted */
+  /* set focus on the typing div when component mounted */
   useEffect(()=> {
     const container = containerRef.current;
-    
+
     if(!container) return;
 
     setTimeout(() => container.focus(), 0);
   }, []);
 
   /* sroll content inside of div */
-/*
+  /*
   useEffect(() => {
     if (containerRef.current && spanRefs.current[currentLetterIndex]) {
       const container = containerRef.current
@@ -51,7 +51,7 @@ export function TypingWindow() {
     setIsFocusOnDiv(false)
   }
 
-/* if the div lost focus let a user know by bluring it */
+  /* if the div lost focus let a user know by bluring it */
   const mods = {[cls.blured]: !isFocusOnDiv}
   useEffect(()=> console.log(isFocusOnDiv, 'is focused on div'), [isFocusOnDiv])
 
@@ -80,15 +80,15 @@ export function TypingWindow() {
   return (
     <div className={cls.TypingWindow}>
       {!isFocusOnDiv && <div onClick={() => containerRef?.current?.focus()} className={cls.focusPopup}>Press here to return focus</div>}
-    <div
-      onFocus={onFocusHandler}
-      onBlur={onBlurHandler}
-      ref={containerRef}
-      className={classNames(cls.Container, mods, [])}
-      tabIndex={0}
-      onKeyDown={onKeyDownHandler}
-    >
-      {[...mockedText, ...filler].map((el, index) => (
+      <div
+        onFocus={onFocusHandler}
+        onBlur={onBlurHandler}
+        ref={containerRef}
+        className={classNames(cls.Container, mods, [])}
+        tabIndex={0}
+        onKeyDown={onKeyDownHandler}
+      >
+        {[...mockedText, ...filler].map((el, index) => (
           <CustomSpan
             key={index}
             ref={(el) => (spanRefs.current[index] = el)} // Assign ref
@@ -98,9 +98,9 @@ export function TypingWindow() {
           >
             {el === ' ' ? '\u00A0' : el}
           </CustomSpan>
-      ))}
+        ))}
+      </div>
     </div>
-</div>
   )
 }
 

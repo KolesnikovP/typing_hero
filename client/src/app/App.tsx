@@ -1,5 +1,5 @@
 // import './App.scss'
-import { TypingWindow } from '@/features/TypingWindow'
+import { TypingPage } from '@/pages/TypingPage'
 import { Header } from '@widgets/Header'
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
       <h1>Vite + React</h1>
       <div className="" style={{display: 'flex', flexDirection: 'column', alignItems: 'center' ,justifyContent: 'center'}}>
         <div>While routes not written</div>
-        <TypingWindow/>
+        <TypingPage/>
       </div>
     </div>
   )
