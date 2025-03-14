@@ -15,9 +15,14 @@ export function TypingWindow() {
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
 
   useEffect(()=> {
-    containerRef?.current?.focus()
+    const container = containerRef.current;
+    
+    if(!container) return;
 
-    console.log(containerRef?.current === document.activeElement, 'focus effect')
+    container.focus(); // Set focus on mount
+
+    console.log(container === document.activeElement, 'focus effect');
+
   }, []);
 
   useEffect(() => {
@@ -39,6 +44,10 @@ export function TypingWindow() {
 
   function onFocusHandler(e: FocusEventHandler<HTMLDivElement>) {
     console.log(e.name, 'on focus handler')
+  }
+
+  function onBlurHandler() {
+    console.log('focus lost')
   }
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
@@ -69,6 +78,7 @@ export function TypingWindow() {
   return (
     <div
       onFocus={onFocusHandler}
+      onBlur={onBlurHandler}
       ref={containerRef}
       className={cls.Container}
       tabIndex={0}
