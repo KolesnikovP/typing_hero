@@ -1,20 +1,26 @@
-import { KeyboardEvent, useEffect, useRef, useState } from 'react'
+import { FocusEventHandler, KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { getMockedTypingText } from '../mockText'
 import { CustomSpan } from './CustomSpan/CustomSpan'
 import cls from './TypingWindow.module.scss'
 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 const filler = Array(200).fill(' ')
-console.log(filler)
 const ignoreKeysList: Set<string> = new Set(['Shift', 'Control', 'Meta', 'Alt', 'Tab'])
 
 export function TypingWindow() {
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [mistakenIndexes, setMistakenIndexes] = useState(new Set<number>());
+  const [isFocusOnDiv, setIsFocusOnDiv] = useState(false);
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
 
-    useEffect(() => {
+  useEffect(()=> {
+    containerRef?.current?.focus()
+
+    console.log(containerRef?.current === document.activeElement, 'focus effect')
+  }, []);
+
+  useEffect(() => {
     if (containerRef.current && spanRefs.current[currentLetterIndex]) {
       const container = containerRef.current
       const currentSpan = spanRefs.current[currentLetterIndex]
@@ -30,6 +36,10 @@ export function TypingWindow() {
       }
     }
   }, [currentLetterIndex])
+
+  function onFocusHandler(e: FocusEventHandler<HTMLDivElement>) {
+    console.log(e.name, 'on focus handler')
+  }
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
     // console.log(containerRef.current?.clientHeight)
@@ -58,6 +68,7 @@ export function TypingWindow() {
 
   return (
     <div
+      onFocus={onFocusHandler}
       ref={containerRef}
       className={cls.Container}
       tabIndex={0}
