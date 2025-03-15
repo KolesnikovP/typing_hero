@@ -8,7 +8,8 @@ const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMo
 const filler = Array(200).fill(' ')
 const ignoreKeysList: Set<string> = new Set(['Shift', 'Control', 'Meta', 'Alt', 'Tab'])
 
-export function TypingWindow() {
+export function TypingWindow(props: {canType?: boolean}) {
+  const {canType} = props;
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [mistakenIndexes, setMistakenIndexes] = useState(new Set<number>());
   const [isFocusOnDiv, setIsFocusOnDiv] = useState(false);
@@ -24,26 +25,7 @@ export function TypingWindow() {
     setTimeout(() => container.focus(), 0);
   }, []);
 
-  /* sroll content inside of div */
-  /*
-  useEffect(() => {
-    if (containerRef.current && spanRefs.current[currentLetterIndex]) {
-      const container = containerRef.current
-      const currentSpan = spanRefs.current[currentLetterIndex]
-
-      if (currentSpan) {
-        const spanBottom = currentSpan.offsetTop + currentSpan.clientHeight
-        const containerBottom = container.scrollTop + container.clientHeight
-
-        // Scroll only if the current letter is beyond the visible container
-        if (spanBottom > containerBottom) {
-          container.scrollTop = spanBottom - container.clientHeight
-        }
-      }
-    }
-  }, [currentLetterIndex])
-*/
-  function onFocusHandler() {
+ function onFocusHandler() {
     setIsFocusOnDiv(true);
   }
 
@@ -53,7 +35,6 @@ export function TypingWindow() {
 
   /* if the div lost focus let a user know by bluring it */
   const mods = {[cls.blured]: !isFocusOnDiv}
-  useEffect(()=> console.log(isFocusOnDiv, 'is focused on div'), [isFocusOnDiv])
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
     if(!ignoreKeysList.has(e.key)) {
@@ -103,4 +84,23 @@ export function TypingWindow() {
     </div>
   )
 }
+  /* sroll content inside of div */
+  /*
+  useEffect(() => {
+    if (containerRef.current && spanRefs.current[currentLetterIndex]) {
+      const container = containerRef.current
+      const currentSpan = spanRefs.current[currentLetterIndex]
 
+      if (currentSpan) {
+        const spanBottom = currentSpan.offsetTop + currentSpan.clientHeight
+        const containerBottom = container.scrollTop + container.clientHeight
+
+        // Scroll only if the current letter is beyond the visible container
+        if (spanBottom > containerBottom) {
+          container.scrollTop = spanBottom - container.clientHeight
+        }
+      }
+    }
+  }, [currentLetterIndex])
+*/
+ 

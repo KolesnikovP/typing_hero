@@ -10,7 +10,7 @@ export const TypingPage = () => {
       <h2>Time Left: {timeLeft.toFixed(1)}s</h2>
       <button onClick={startCountdown}>Start</button>
       <button onClick={resetCountdown}>Reset</button>
-     <TypingWindow/> 
+     <TypingWindow canType={isRunning}/> 
     </div>
   )
 }
