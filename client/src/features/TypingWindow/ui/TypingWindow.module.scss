@@ -1,19 +1,33 @@
+.TypingWindow {
+  position: relative;
+}
+
 .Container {
   padding: 15px;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-/* TODO: remove it. just temporary  */
-  height: 250px;
-  width: 700px;
-  /* justify-content: center; */
-  /* align-items: center; */
-  /* background: #415a77; */
+  height: 180px;
+  max-width: 700px;
   background: var(--bg-color);
   overflow: hidden;
   overflowY: 'auto';
+  border-style: none;
+  outline: none;
 }
 
 .blured {
   filter: blur(4px);
 }
+
+.focusPopup {
+  font-size: var(--font-size-l);
+  filter: blur(0px);
+  color: var(--secondary-color);
+  justify-content: center;
+  display: flex;
+  z-index: 999;
+  width: 100%;
+  position: absolute;
+  top: 30%;
+} 
