@@ -1,21 +1,23 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
-import { getMockedTypingText } from '../mockText'
 import { CustomSpan } from './CustomSpan/CustomSpan'
 import cls from './TypingWindow.module.scss'
 import { classNames } from '@/shared/lib/classNames/classNames'
 
-const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 const filler = Array(200).fill(' ')
-const ignoreKeysList: Set<string> = new Set(['Shift', 'Control', 'Meta', 'Alt', 'Tab'])
-
-export function TypingWindow(props: {canType?: boolean}) {
-  const {canType} = props;
+const ignoreKeysList: Set<string> = new Set(['Shift', 'Control', 'Meta', 'Alt', 'Tab', 'Esc'])
+type TypingWindowProps = {
+  canType?: boolean;
+  typingText: string[];
+  onFirstKeyPress: () => void;
+} 
+export function TypingWindow(props: TypingWindowProps) {
+  const {canType, typingText, onFirstKeyPress} = props;
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [mistakenIndexes, setMistakenIndexes] = useState(new Set<number>());
   const [isFocusOnDiv, setIsFocusOnDiv] = useState(false);
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
-
+  const [isFirstKeyPressed, setIsFirstKeyPressed] = useState(false);
   /* set focus on the typing div when component mounted */
   useEffect(()=> {
     const container = containerRef.current;
@@ -38,7 +40,12 @@ export function TypingWindow(props: {canType?: boolean}) {
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
     if(!ignoreKeysList.has(e.key)) {
-      if(e.key !== mockedText[currentLetterIndex]) {
+      // check it twice
+      if (!isFirstKeyPressed) {
+        setIsFirstKeyPressed(true);
+        onFirstKeyPress(); // Notify the parent that typing has started
+      }
+      if(e.key !== typingText[currentLetterIndex]) {
         setMistakenIndexes(prev => new Set(prev).add(currentLetterIndex))
         // Scroll to the currently typed letter
         spanRefs.current[currentLetterIndex]?.scrollIntoView({
@@ -47,11 +54,11 @@ export function TypingWindow(props: {canType?: boolean}) {
           inline: "start",
         })
 
-        if(currentLetterIndex < mockedText.length) {
+        if(currentLetterIndex < typingText.length) {
           setCurrentLetterIndex(prev => prev + 1)
         }
       } else {
-        if(currentLetterIndex < mockedText.length) {
+        if(currentLetterIndex < typingText.length) {
           setCurrentLetterIndex(prev => prev + 1)
         }
       }
@@ -69,7 +76,7 @@ export function TypingWindow(props: {canType?: boolean}) {
         tabIndex={0}
         onKeyDown={onKeyDownHandler}
       >
-        {[...mockedText, ...filler].map((el, index) => (
+        {[...typingText, ...filler].map((el, index) => (
           <CustomSpan
             key={index}
             ref={(el) => (spanRefs.current[index] = el)} // Assign ref
