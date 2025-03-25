@@ -9,15 +9,19 @@ type TypingWindowProps = {
   canType?: boolean;
   typingText: string[];
   onFirstKeyPress: () => void;
+  isSessionFinished: boolean;
+  onSessionFinish: () => void;
 } 
 export function TypingWindow(props: TypingWindowProps) {
-  const {canType, typingText, onFirstKeyPress} = props;
+  const {canType, typingText, onFirstKeyPress, isSessionFinished, onSessionFinish} = props;
+ 
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [mistakenIndexes, setMistakenIndexes] = useState(new Set<number>());
   const [isFocusOnDiv, setIsFocusOnDiv] = useState(false);
+  const [isFirstKeyPressed, setIsFirstKeyPressed] = useState(false);
+ 
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
-  const [isFirstKeyPressed, setIsFirstKeyPressed] = useState(false);
   /* set focus on the typing div when component mounted */
   useEffect(()=> {
     const container = containerRef.current;
@@ -35,39 +39,50 @@ export function TypingWindow(props: TypingWindowProps) {
     setIsFocusOnDiv(false)
   }
 
-  /* if the div lost focus let a user know by bluring it */
+  useEffect(() => {
+    if(isSessionFinished) {
+      onSessionFinish()
+    }
+  }, [isSessionFinished])
+
+  /* if the div lost focus let a user know by bluring the typing window */
   const mods = {[cls.blured]: !isFocusOnDiv}
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
-    if(!ignoreKeysList.has(e.key)) {
-      // check it twice
-      if (!isFirstKeyPressed) {
-        setIsFirstKeyPressed(true);
-        onFirstKeyPress(); // Notify the parent that typing has started
-      }
-      if(e.key !== typingText[currentLetterIndex]) {
-        setMistakenIndexes(prev => new Set(prev).add(currentLetterIndex))
-        // Scroll to the currently typed letter
-        spanRefs.current[currentLetterIndex]?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-          inline: "start",
-        })
+    if(ignoreKeysList.has(e.key) || currentLetterIndex >= typingText.length) return;
+  
+    if(currentLetterIndex === 0 && !isFirstKeyPressed) {
+      setIsFirstKeyPressed(true);
+      onFirstKeyPress(); // Notify the parent that typing has started
+    }
 
-        if(currentLetterIndex < typingText.length) {
-          setCurrentLetterIndex(prev => prev + 1)
-        }
-      } else {
-        if(currentLetterIndex < typingText.length) {
-          setCurrentLetterIndex(prev => prev + 1)
-        }
-      }
-    } 
+    if(!canType && currentLetterIndex !== 0) return;
+
+    if(e.key !== typingText[currentLetterIndex]) {
+      setMistakenIndexes(prev => new Set(prev).add(currentLetterIndex))
+      // setCurrentLetterIndex(prev => prev + 1)
+    } else {
+      setCurrentLetterIndex(prev => prev + 1)
+    }
+
+    // Scroll to the currently typed letter
+    spanRefs.current[currentLetterIndex]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: "start",
+    })
+
   }
 
   return (
     <div className={cls.TypingWindow}>
-      {!isFocusOnDiv && <div onClick={() => containerRef?.current?.focus()} className={cls.focusPopup}>Press here to return focus</div>}
+      {
+        !isFocusOnDiv && 
+          <div 
+            onClick={() => containerRef?.current?.focus()} className={cls.focusPopup}>
+            Press here to return focus
+          </div>
+      }
       <div
         onFocus={onFocusHandler}
         onBlur={onBlurHandler}
