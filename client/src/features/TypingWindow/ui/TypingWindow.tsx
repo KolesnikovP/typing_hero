@@ -10,7 +10,7 @@ type TypingWindowProps = {
   typingText: string[];
   onFirstKeyPress: () => void;
   isSessionFinished: boolean;
-  onSessionFinish: () => void;
+  onSessionFinish: (chars: number, mistakes: number) => void;
 } 
 
 export function TypingWindow(props: TypingWindowProps) {
@@ -43,7 +43,7 @@ export function TypingWindow(props: TypingWindowProps) {
   useEffect(() => {
     if(isSessionFinished) {
       console.log(currentLetterIndex, mistakenIndexes)
-      onSessionFinish()
+      onSessionFinish(currentLetterIndex, mistakenIndexes.size)
     }
   }, [isSessionFinished])
 
