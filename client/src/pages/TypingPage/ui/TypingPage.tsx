@@ -7,23 +7,41 @@ import { useEffect, useState } from 'react';
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 export const TypingPage = () => {
   const [sessionStarted, setSessionStarted] = useState(false);
-  const { timeLeft, startCountdown, resetCountdown, isRunning } = useAccurateCountdown(10); // 10 seconds countdown
+  const [sessionFinished, setSessionFinished] = useState(false);
+  const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(3); // 10 seconds countdown
     // Function to start the session when user types first letter
   const handleFirstKeyPress = () => {
-    console.log('here§')
     if (!sessionStarted) {
       setSessionStarted(true);
       startCountdown(); // Start the countdown
     }
   };
 
+  const onSessionFinish = () => {
+    console.log('session is over')
+  }
+
+  useEffect(() => {
+    if(Number(timeLeft.toFixed(1)) === 0) {
+      setSessionFinished(true);
+      setSessionStarted(false);
+    }
+  }, [timeLeft])
+
   return (
     <div>
-      <Timer timeLeft={timeLeft.toFixed(1)}/>
+      <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
       <h2>Time Left: {timeLeft.toFixed(1)}s</h2>
       <button onClick={startCountdown}>Start</button>
       <button onClick={resetCountdown}>Reset</button>
-     <TypingWindow canType={isRunning} typingText={mockedText} onFirstKeyPress={handleFirstKeyPress}/> 
+      <TypingWindow
+        // canType={Number(timeLeft.toFixed(1)) > 0 && sessionStarted}
+        canType={sessionStarted}
+        typingText={mockedText}
+        onFirstKeyPress={handleFirstKeyPress}
+        isSessionFinished={sessionFinished}
+        onSessionFinish={onSessionFinish}
+      /> 
     </div>
   )
 }
