@@ -12,6 +12,7 @@ type TypingWindowProps = {
   isSessionFinished: boolean;
   onSessionFinish: () => void;
 } 
+
 export function TypingWindow(props: TypingWindowProps) {
   const {canType, typingText, onFirstKeyPress, isSessionFinished, onSessionFinish} = props;
  
@@ -41,6 +42,7 @@ export function TypingWindow(props: TypingWindowProps) {
 
   useEffect(() => {
     if(isSessionFinished) {
+      console.log(currentLetterIndex, mistakenIndexes)
       onSessionFinish()
     }
   }, [isSessionFinished])
@@ -60,7 +62,6 @@ export function TypingWindow(props: TypingWindowProps) {
 
     if(e.key !== typingText[currentLetterIndex]) {
       setMistakenIndexes(prev => new Set(prev).add(currentLetterIndex))
-      // setCurrentLetterIndex(prev => prev + 1)
     } else {
       setCurrentLetterIndex(prev => prev + 1)
     }
