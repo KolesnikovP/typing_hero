@@ -8,13 +8,14 @@ import cls from './TypingPage.module.scss'
 
 const initSessionProgress = {lettersTyped: 0, mistakesCount: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
+const TIME_BY_DEFAULT = 5
 export const TypingPage = () => {
   const [isSessionStarted, setIsSessionStarted] = useState(false);
   const [isSessionFinished, setIsSessionFinished] = useState(false);
   const [sessionResults, setSessionResults] = useState(initSessionProgress)
   const [isResultsVisible, setIsResultsVisible] = useState(false);
 
-  const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(5); // 10 seconds countdown
+  const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(TIME_BY_DEFAULT); // 10 seconds countdown
     // Function to start the session when user types first letter
   const handleFirstKeyPress = () => {
     if (!isSessionStarted) {
@@ -38,25 +39,31 @@ export const TypingPage = () => {
 
   return (
     <div className={cls.TypingPage}>
-      <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
-      <div>
-        <button onClick={startCountdown}>Start</button>
-        <button onClick={resetCountdown}>Reset</button>
-      </div>
-      {isResultsVisible?
+      {
+        isResultsVisible?
         <SessionStats
           lettersTyped={sessionResults.lettersTyped}
           mistakesCount={sessionResults.mistakesCount}
+          givenTime={TIME_BY_DEFAULT}
         />
         :
-        <TypingWindow
-          canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
-          typingText={mockedText}
-          onFirstKeyPress={handleFirstKeyPress}
-          isSessionFinished={isSessionFinished}
-          onSessionFinish={onSessionFinish}
-        /> 
-      }
+        <div>
+          <div>
+            <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
+            <div>
+              <button onClick={startCountdown}>Start</button>
+              <button onClick={resetCountdown}>Reset</button>
+            </div>
+          </div>
+          <TypingWindow
+            canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
+            typingText={mockedText}
+            onFirstKeyPress={handleFirstKeyPress}
+            isSessionFinished={isSessionFinished}
+            onSessionFinish={onSessionFinish}
+          /> 
+        </div>
+       }
       <button onClick={() => {
         setIsSessionFinished(false);
         setIsResultsVisible(false);
