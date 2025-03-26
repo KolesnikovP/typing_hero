@@ -3,45 +3,69 @@ import { TypingWindow } from '@/features/TypingWindow'
 import { getMockedTypingText } from '@/features/TypingWindow/mockText';
 import useAccurateCountdown from '@/shared/hooks/useAccurateCountDown';
 import { useEffect, useState } from 'react';
+import { SessionStats } from './SessionStats/SessionStats';
+import cls from './TypingPage.module.scss'
 
+const initSessionProgress = {lettersTyped: 0, mistakesCount: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 export const TypingPage = () => {
-  const [sessionStarted, setSessionStarted] = useState(false);
-  const [sessionFinished, setSessionFinished] = useState(false);
-  const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(3); // 10 seconds countdown
+  const [isSessionStarted, setIsSessionStarted] = useState(false);
+  const [isSessionFinished, setIsSessionFinished] = useState(false);
+  const [sessionResults, setSessionResults] = useState(initSessionProgress)
+  const [isResultsVisible, setIsResultsVisible] = useState(false);
+
+  const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(5); // 10 seconds countdown
     // Function to start the session when user types first letter
   const handleFirstKeyPress = () => {
-    if (!sessionStarted) {
-      setSessionStarted(true);
+    if (!isSessionStarted) {
+      setIsSessionStarted(true);
       startCountdown(); // Start the countdown
     }
   };
 
-  const onSessionFinish = () => {
-    console.log('session is over')
+  const onSessionFinish = (chars: number, mistakes: number) => {
+    setSessionResults(prev => ({...prev, lettersTyped: chars, mistakesCount: mistakes}))
+    console.log('session is over', '>>>', chars, '  ', mistakes)
+    setIsResultsVisible(true)
   }
 
   useEffect(() => {
     if(Number(timeLeft.toFixed(1)) === 0) {
-      setSessionFinished(true);
-      setSessionStarted(false);
+      setIsSessionFinished(true);
+      setIsSessionStarted(false);
     }
   }, [timeLeft])
 
   return (
-    <div>
+    <div className={cls.TypingPage}>
       <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
-      <h2>Time Left: {timeLeft.toFixed(1)}s</h2>
-      <button onClick={startCountdown}>Start</button>
-      <button onClick={resetCountdown}>Reset</button>
-      <TypingWindow
-        // canType={Number(timeLeft.toFixed(1)) > 0 && sessionStarted}
-        canType={sessionStarted}
-        typingText={mockedText}
-        onFirstKeyPress={handleFirstKeyPress}
-        isSessionFinished={sessionFinished}
-        onSessionFinish={onSessionFinish}
-      /> 
+      <div>
+        <button onClick={startCountdown}>Start</button>
+        <button onClick={resetCountdown}>Reset</button>
+      </div>
+      {isResultsVisible?
+        <SessionStats
+          lettersTyped={sessionResults.lettersTyped}
+          mistakesCount={sessionResults.mistakesCount}
+        />
+        :
+        <TypingWindow
+          canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
+          typingText={mockedText}
+          onFirstKeyPress={handleFirstKeyPress}
+          isSessionFinished={isSessionFinished}
+          onSessionFinish={onSessionFinish}
+        /> 
+      }
+      <button onClick={() => {
+        setIsSessionFinished(false);
+        setIsResultsVisible(false);
+        setIsSessionStarted(false);
+        setSessionResults(initSessionProgress);
+        resetCountdown();
+      }}>
+        AGAIN
+      </button>
     </div>
   )
 }
