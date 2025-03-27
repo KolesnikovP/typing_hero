@@ -6,10 +6,8 @@ function App() {
 
   return (
     <div className='app'>
-     <Header/> 
-      <h1>Vite + React</h1>
+      <Header/> 
       <div className="" style={{display: 'flex', flexDirection: 'column', alignItems: 'center' ,justifyContent: 'center'}}>
-        <div>While routes not written</div>
         <TypingPage/>
       </div>
     </div>
