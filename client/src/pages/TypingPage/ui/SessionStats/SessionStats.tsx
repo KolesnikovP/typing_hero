@@ -18,8 +18,8 @@ export const SessionStats = (props : SessionStatsProps) => {
   return (
     <div>
       letters typed: {lettersTyped} | made mistakes: {mistakesCount} | session time: {givenTime}s     
-     <p>CPM: {cpm}</p> 
-     <p>WPM: {wpm}</p> 
+      <p>CPM: {cpm}</p> 
+      <p>WPM: {wpm}</p> 
     </div>
   )
 }
