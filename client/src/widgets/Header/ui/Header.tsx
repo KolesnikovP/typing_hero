@@ -1,6 +1,6 @@
-import { Icon } from '@/shared/ui/Icon/ui/Icon'
+import { Icon } from '@shared/ui/Icon/ui/Icon'
 import cls from './Header.module.scss'
-import UserIcon from '@/shared/assets/icons/user.svg'
+import UserIcon from '@shared/assets/icons/user.svg'
 
 export const Header = () => {
   return (
