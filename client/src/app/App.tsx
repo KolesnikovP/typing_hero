@@ -2,6 +2,7 @@
 import { TypingPage } from '@/pages/TypingPage'
 import { Header } from '@widgets/Header'
 import { Suspense } from 'react'
+import { AppRouter } from './providers/router'
 
 function App() {
 
@@ -17,8 +18,8 @@ function App() {
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-        <TypingPage/>
-      </div>
+          <AppRouter/>
+        </div>
 
       </Suspense>
 
