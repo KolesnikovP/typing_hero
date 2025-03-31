@@ -4,6 +4,7 @@ import {
     AppRoutes,
     getRouteTyping,
     getRouteProfile,
+    getRouteForbidden,
 } from '@/shared/const/router';
 
 import { AppRoutesProps } from '@/shared/types/router';
@@ -15,6 +16,11 @@ export const routeConfig: Record<AppRoutes, AppRoutesProps> = {
     },
     [AppRoutes.PROFILE]: {
         path: getRouteProfile(),
+        element: <ProfilePage />,
+        authOnly: true,
+    },
+    [AppRoutes.FORBIDDEN]: {
+        path: getRouteForbidden(),
         element: <ProfilePage />,
         authOnly: true,
     },

@@ -95,7 +95,8 @@ export function TypingWindow(props: TypingWindowProps) {
         {[...typingText, ...filler].map((el, index) => (
           <CustomSpan
             key={index}
-            ref={(el) => (spanRefs.current[index] = el)} // Assign ref
+            /* @ts-ignore */
+            ref={(el: HTMLSpanElement) => (spanRefs.current[index] = el)} // Assign ref
             isPointerOn={index === currentLetterIndex }
             isTyped={currentLetterIndex <= index}
             isMistakenKey={mistakenIndexes.has(index)} // Check if this index was mistaken

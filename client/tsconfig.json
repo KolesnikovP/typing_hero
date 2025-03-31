@@ -7,6 +7,12 @@
   "compilerOptions": {
     // ... your other compiler options
     "baseUrl": ".",
+    "target": "es5",
+    "jsx": "react-jsx",
+    // Компилятор будет обрабатывать не только TS файлы, но и JS файлы
+    "allowJs": true,
+    "strict": true,
+    "moduleResolution": "node",
     "paths": {
       "@/*": ["src/*"],
       "@app/*": ["src/app/*"],

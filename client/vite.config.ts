@@ -21,5 +21,11 @@ export default defineConfig({
       '@entities': path.resolve(__dirname, './src/entities'),
       '@shared': path.resolve(__dirname, './src/shared'),
     }
-  }
+  },
+  define: {
+    __IS_DEV__: JSON.stringify(true),
+    __API__: JSON.stringify('http://localhost:8000'),
+    __PROJECT__: JSON.stringify('frontend'),
+  },
+
 })

@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "target": "ES2022",
+    "target": "es5",
+    "jsx": "react-jsx",
+    // Компилятор будет обрабатывать не только TS файлы, но и JS файлы
+    "allowJs": true,
+    "strict": true,
+    "moduleResolution": "node",
+
     "lib": ["ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,

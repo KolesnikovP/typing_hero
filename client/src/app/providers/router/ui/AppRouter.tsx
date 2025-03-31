@@ -1,7 +1,7 @@
-import React, { memo, Suspense, useCallback } from 'react';
+import { memo, Suspense, useCallback } from 'react';
 // import { Route, Routes } from 'react-router-dom';
 // import { PageLoader } from '@/widgets/PageLoader';
-// import { RequireAuth } from './RequireAuth';
+import { RequireAuth } from './RequireAuth';
 import { routeConfig } from '../config/routeConfig';
 import { AppRoutesProps } from '@/shared/types/router';
 import { Route, Routes } from 'react-router';
@@ -19,8 +19,8 @@ const AppRouter = () => {
             <Route
                 key={route.path}
                 path={route.path}
-                // element={route.authOnly ? <RequireAuth roles={route.roles}>{element}</RequireAuth> : element}
-                element={element}
+                element={route.authOnly ? <RequireAuth roles={route.roles}>{element}</RequireAuth> : element}
+                // element={element}
             />
         );
     }, []);

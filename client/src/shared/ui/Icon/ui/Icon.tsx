@@ -4,7 +4,7 @@ import cls from './Icon.module.scss';
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {
     className?: string;
-    Svg: React.FC<React.SVGProps<SVGSVGElement>>;
+    Svg: string | React.FC<React.SVGProps<SVGSVGElement>>;
     inverted?: boolean;
 }
 

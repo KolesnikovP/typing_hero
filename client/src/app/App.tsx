@@ -1,5 +1,4 @@
 // import './App.scss'
-import { TypingPage } from '@/pages/TypingPage'
 import { Header } from '@widgets/Header'
 import { Suspense } from 'react'
 import { AppRouter } from './providers/router'
