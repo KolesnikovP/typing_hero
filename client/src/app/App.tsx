@@ -1,9 +1,19 @@
 // import './App.scss'
 import { Header } from '@widgets/Header'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { AppRouter } from './providers/router'
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { useSelector } from 'react-redux';
+import { getUserInited, userActions } from '@/entities/User';
 
 function App() {
+  const dispatch = useAppDispatch();
+  const inited = useSelector(getUserInited);
+
+  useEffect(() => {
+    dispatch(userActions.initAuthData());
+  }, [dispatch]);
+
 
   return (
     <div className='app'>
@@ -17,7 +27,7 @@ function App() {
             alignItems: 'center',
             justifyContent: 'center'
           }}>
-          <AppRouter/>
+          {inited && <AppRouter/>}
         </div>
 
       </Suspense>
