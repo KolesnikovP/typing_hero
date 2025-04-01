@@ -53,18 +53,18 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
       reducers={initialReducers}
     >
       <div className={classNames(cls.LoginForm, {}, [className])}>
-        <Text title={'Форма авторизации'} />
+        <Text title={'Auth form'} />
         {error && <Text text={'Вы ввели неверный логин или пароль'} theme={"error"} />}
         <Input
           autofocus
           type="text"
-          placeholder={'Введите username'}
+          placeholder={'Enter username'}
           onChange={onChangeUsername}
           value={username}
         />
         <Input
           type="text"
-          placeholder={'Введите пароль'}
+          placeholder={'Enter password'}
           onChange={onChangePassword}
           value={password}
         />

@@ -1,9 +1,15 @@
 :root {
     --bg-color: #1b263b;
+    --bg-color-rgb: 27, 38, 59;
+
     --inverted-bg-color: #090949;
+
     --primary-color: #415a77;
+    --primary-color-rgb: 65, 90, 119;
+
     --secondary-color: #e0e1dd;
     --secondary-color-rgb: 224, 225, 221;
+
     --inverted-primary-color: #04ff04;
     --inverted-secondary-color: #049604;
 
@@ -15,7 +21,7 @@
     --code-bg: #fff;
 
     // card
-    --card-bg: #d5d5d7;
+    --card-bg: #36344F;
 
     // listbox
     --listbox-bg: #d5d5d7;
