@@ -24,6 +24,7 @@ export function TypingWindow(props: TypingWindowProps) {
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
   /* set focus on the typing div when component mounted */
+
   useEffect(()=> {
     const container = containerRef.current;
 
@@ -39,6 +40,17 @@ export function TypingWindow(props: TypingWindowProps) {
   function onBlurHandler() {
     setIsFocusOnDiv(false)
   }
+
+  useEffect(() => {
+    const focusOnTypingWindow = () => containerRef.current?.focus()
+    if(!isFocusOnDiv) {
+      window.addEventListener('keypress', focusOnTypingWindow)
+    }
+
+    return () => {
+      window.removeEventListener('keypress', focusOnTypingWindow)
+    }
+  }, [isFocusOnDiv])
 
   useEffect(() => {
     if(isSessionFinished) {
@@ -81,7 +93,7 @@ export function TypingWindow(props: TypingWindowProps) {
         !isFocusOnDiv && 
           <div 
             onClick={() => containerRef?.current?.focus()} className={cls.focusPopup}>
-            Press here to return focus
+            Press here or click any button to return focus
           </div>
       }
       <div
