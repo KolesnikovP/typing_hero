@@ -1,10 +1,10 @@
 import { Timer } from '@/features/Timer';
 import { TypingWindow } from '@/features/TypingWindow'
 import { getMockedTypingText } from '@/features/TypingWindow/mockText';
-import useAccurateCountdown from '@/shared/hooks/useAccurateCountDown';
 import { useEffect, useState } from 'react';
 import { SessionStats } from './SessionStats/SessionStats';
 import cls from './TypingPage.module.scss'
+import useAccurateCountdown from '@/shared/lib/hooks/useAccurateCountDown';
 
 const initSessionProgress = {lettersTyped: 0, mistakesCount: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
