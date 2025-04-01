@@ -18,7 +18,7 @@ function Modal(props: ModalProps) {
     <>
       <AnimatePresence>
         {isOpen && (
-          <Dialog static open={isOpen} onClose={onClose} className="relative z-50">
+          <Dialog static open={isOpen} onClose={onClose} >
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

@@ -42,17 +42,6 @@ export function TypingWindow(props: TypingWindowProps) {
   }
 
   useEffect(() => {
-    const focusOnTypingWindow = () => containerRef.current?.focus()
-    if(!isFocusOnDiv) {
-      window.addEventListener('keypress', focusOnTypingWindow)
-    }
-
-    return () => {
-      window.removeEventListener('keypress', focusOnTypingWindow)
-    }
-  }, [isFocusOnDiv])
-
-  useEffect(() => {
     if(isSessionFinished) {
       console.log(currentLetterIndex, mistakenIndexes)
       onSessionFinish(currentLetterIndex, mistakenIndexes.size)
@@ -139,4 +128,20 @@ export function TypingWindow(props: TypingWindowProps) {
     }
   }, [currentLetterIndex])
 */
- 
+
+/* *
+ *
+  useEffect(() => {
+    const focusOnTypingWindow = () => {
+      containerRef.current?.focus()
+      setIsFocusOnDiv(true)
+    }
+    if(!isFocusOnDiv) {
+      window.addEventListener('keypress', focusOnTypingWindow)
+    }
+
+    return () => {
+      window.removeEventListener('keypress', focusOnTypingWindow)
+    }
+  }, [isFocusOnDiv])
+ */
