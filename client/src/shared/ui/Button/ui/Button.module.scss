@@ -40,10 +40,18 @@
 }
 
 .background {
-    /* background: var(--bg-color); */
+  /* background: var(--bg-color); */
   background: color.adjust(rgb(27, 38, 59), $lightness: -3%);
+  color: var(--secondary-color);
+  border: none;
+  border-radius: 4px;
+
+  &:hover{
     color: var(--primary-color);
-    border: none;
+    background: #FCF6F5;
+  }
+
+
 }
 
 .backgroundInverted {

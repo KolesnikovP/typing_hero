@@ -69,16 +69,13 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
           value={password}
         />
         <Button
-          theme={'clear'}
+          theme={'background'}
           className={cls.loginBtn}
           onClick={onLoginClick}
           disabled={isLoading}
         >
-          {'Войти'}
+          Войти
         </Button>
-        <Button theme='background' onClick={() => {
-          fetch("http://localhost:8001/auth/google")
-        }}>GOOGLE</Button>
       </div>
     </DynamicModuleLoader>
     );
