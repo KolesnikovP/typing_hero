@@ -19,14 +19,7 @@ function App() {
     <div className='app'>
       <Header/> 
       <Suspense>
-        <div 
-          className="content-page" 
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+        <div className="content-page">
           {inited && <AppRouter/>}
         </div>
 

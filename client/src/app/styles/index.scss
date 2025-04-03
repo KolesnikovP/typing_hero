@@ -17,7 +17,10 @@
 }
 
 .content-page {
-    display: flex;
+  display: 'flex';
+  flexDirection: 'column';
+  alignItems: 'center';
+  justifyContent: 'center';
 }
 
 *::-webkit-scrollbar {
