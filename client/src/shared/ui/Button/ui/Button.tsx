@@ -11,11 +11,7 @@ export type ButtonTheme = 'clear'
     |'background'
     |'backgroundInverted';
 
-export enum ButtonSize {
-    M = 'size_m',
-    L = 'size_l',
-    XL = 'size_xl',
-}
+export type ButtonSize = 'size_m' | 'size_l' | 'size_xl'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>{
     className?: string;
@@ -49,11 +45,11 @@ export const Button = memo((props: ButtonProps) => {
     const {
         className,
         children,
-        theme = ButtonTheme.OUTLINE,
+        theme = 'outline',
         square,
         disabled,
         fullWidth,
-        size = ButtonSize.M,
+        size = "size_m",
         ...otherProps
     } = props;
 
