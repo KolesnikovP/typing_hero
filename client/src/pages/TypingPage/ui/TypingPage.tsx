@@ -5,6 +5,9 @@ import { useEffect, useState } from 'react';
 import { SessionStats } from './SessionStats/SessionStats';
 import cls from './TypingPage.module.scss'
 import useAccurateCountdown from '@/shared/lib/hooks/useAccurateCountDown';
+import ReloadIcon from '@shared/assets/icons/reload.svg'
+import { Button } from '@/shared/ui/Button';
+import { Icon } from '@/shared/ui/Icon/ui/Icon';
 
 const initSessionProgress = {lettersTyped: 0, mistakesCount: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
@@ -41,12 +44,27 @@ export const TypingPage = () => {
     <div className={cls.TypingPage}>
       {
         isResultsVisible?
-        <SessionStats
-          lettersTyped={sessionResults.lettersTyped}
-          mistakesCount={sessionResults.mistakesCount}
-          givenTime={TIME_BY_DEFAULT}
-        />
-        :
+          <div>
+            <SessionStats
+              className={cls.StatsContainer}
+              lettersTyped={sessionResults.lettersTyped}
+              mistakesCount={sessionResults.mistakesCount}
+              givenTime={TIME_BY_DEFAULT}
+            />
+            <Button 
+              theme='clear'
+              square
+              onClick={() => {
+                setIsSessionFinished(false);
+                setIsResultsVisible(false);
+                setIsSessionStarted(false);
+                setSessionResults(initSessionProgress);
+                resetCountdown();
+              }}>
+              <Icon Svg={ReloadIcon}/> 
+            </Button>
+          </div>
+          :
         <div>
           <div>
             <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
@@ -64,15 +82,6 @@ export const TypingPage = () => {
           /> 
         </div>
        }
-      <button onClick={() => {
-        setIsSessionFinished(false);
-        setIsResultsVisible(false);
-        setIsSessionStarted(false);
-        setSessionResults(initSessionProgress);
-        resetCountdown();
-      }}>
-        AGAIN
-      </button>
     </div>
   )
 }

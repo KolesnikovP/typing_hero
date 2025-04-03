@@ -53,7 +53,12 @@ export function TypingWindow(props: TypingWindowProps) {
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
     if(ignoreKeysList.has(e.key) || currentLetterIndex >= typingText.length) return;
-  
+
+    // Prevent spacebar from scrolling the page
+    if (e.key === " ") {
+      e.preventDefault();
+    }
+
     if(currentLetterIndex === 0 && !isFirstKeyPressed) {
       setIsFirstKeyPressed(true);
       onFirstKeyPress(); // Notify the parent that typing has started
