@@ -8,6 +8,7 @@ import useAccurateCountdown from '@/shared/lib/hooks/useAccurateCountDown';
 import ReloadIcon from '@shared/assets/icons/reload.svg'
 import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon/ui/Icon';
+import { KeyboardHelper } from '@/features/KeyboardHelper';
 
 const initSessionProgress = {lettersTyped: 0, mistakesCount: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
@@ -82,6 +83,7 @@ export const TypingPage = () => {
           /> 
         </div>
        }
+      <KeyboardHelper/>
     </div>
   )
 }

@@ -1,0 +1,28 @@
+.key {
+  border: 1px solid white;
+  padding: 5px;
+  min-height: 30px;
+  min-width: 30px;
+  max-width: 50px;
+  max-height: 50px;
+    .symbol:first-child {
+      color: red;
+  }
+    .symbol:only-child {
+     color: white; 
+  }
+}
+
+
+.KeyboardContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.activeKey {
+  background: blue;
+}
+
+.symbol {
+
+}
