@@ -14,6 +14,7 @@ const initSessionProgress = {lettersTyped: 0, mistakesCount: 0}
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 const TIME_BY_DEFAULT = 5
 export const TypingPage = () => {
+  const [keyboardHelperActiveKey, setKeyboardHelperActiveKey] = useState(mockedText[0])
   const [isSessionStarted, setIsSessionStarted] = useState(false);
   const [isSessionFinished, setIsSessionFinished] = useState(false);
   const [sessionResults, setSessionResults] = useState(initSessionProgress)
@@ -28,9 +29,12 @@ export const TypingPage = () => {
     }
   };
 
+  const updateKeyboardHelperActiveKey = (key: string) => {
+    setKeyboardHelperActiveKey(key)
+}
+
   const onSessionFinish = (chars: number, mistakes: number) => {
     setSessionResults(prev => ({...prev, lettersTyped: chars, mistakesCount: mistakes}))
-    console.log('session is over', '>>>', chars, '  ', mistakes)
     setIsResultsVisible(true)
   }
 
@@ -80,10 +84,12 @@ export const TypingPage = () => {
             onFirstKeyPress={handleFirstKeyPress}
             isSessionFinished={isSessionFinished}
             onSessionFinish={onSessionFinish}
+              // very DEBATABLE
+            updateKeyboardHelperActiveKey={updateKeyboardHelperActiveKey}
           /> 
         </div>
        }
-      <KeyboardHelper/>
+      <KeyboardHelper activeKey={keyboardHelperActiveKey}/>
     </div>
   )
 }

@@ -11,10 +11,18 @@ type TypingWindowProps = {
   onFirstKeyPress: () => void;
   isSessionFinished: boolean;
   onSessionFinish: (chars: number, mistakes: number) => void;
+  updateKeyboardHelperActiveKey?: (currentChar: string) => void;
 } 
 
 export function TypingWindow(props: TypingWindowProps) {
-  const {canType, typingText, onFirstKeyPress, isSessionFinished, onSessionFinish} = props;
+  const {
+    canType,
+    typingText,
+    onFirstKeyPress,
+    isSessionFinished,
+    onSessionFinish,
+    updateKeyboardHelperActiveKey
+  } = props;
  
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [mistakenIndexes, setMistakenIndexes] = useState(new Set<number>());
@@ -26,12 +34,17 @@ export function TypingWindow(props: TypingWindowProps) {
   /* set focus on the typing div when component mounted */
 
   useEffect(()=> {
+
     const container = containerRef.current;
 
     if(!container) return;
 
     setTimeout(() => container.focus(), 0);
   }, []);
+
+  useEffect(() => {
+    updateKeyboardHelperActiveKey && updateKeyboardHelperActiveKey(typingText[currentLetterIndex])
+  }, [currentLetterIndex])
 
  function onFocusHandler() {
     setIsFocusOnDiv(true);
@@ -52,6 +65,7 @@ export function TypingWindow(props: TypingWindowProps) {
   const mods = {[cls.blured]: !isFocusOnDiv}
 
   function onKeyDownHandler(e: KeyboardEvent<HTMLDivElement>){
+
     if(ignoreKeysList.has(e.key) || currentLetterIndex >= typingText.length) return;
 
     // Prevent spacebar from scrolling the page
