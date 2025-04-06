@@ -70,26 +70,27 @@ export const TypingPage = () => {
             </Button>
           </div>
           :
-        <div>
-          <div>
-            <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
+          <>
             <div>
-              <button onClick={startCountdown}>Start</button>
-              <button onClick={resetCountdown}>Reset</button>
+              <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
+              <div>
+                <button onClick={startCountdown}>Start</button>
+                <button onClick={resetCountdown}>Reset</button>
+              </div>
             </div>
-          </div>
-          <TypingWindow
-            canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
-            typingText={mockedText}
-            onFirstKeyPress={handleFirstKeyPress}
-            isSessionFinished={isSessionFinished}
-            onSessionFinish={onSessionFinish}
+            <TypingWindow
+              canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
+              typingText={mockedText}
+              onFirstKeyPress={handleFirstKeyPress}
+              isSessionFinished={isSessionFinished}
+              onSessionFinish={onSessionFinish}
               // very DEBATABLE
-            updateKeyboardHelperActiveKey={updateKeyboardHelperActiveKey}
-          /> 
-        </div>
-       }
-      <KeyboardHelper activeKey={keyboardHelperActiveKey}/>
+              updateKeyboardHelperActiveKey={updateKeyboardHelperActiveKey}
+            /> 
+
+            <KeyboardHelper activeKey={keyboardHelperActiveKey}/>
+          </>
+      }
     </div>
   )
 }
