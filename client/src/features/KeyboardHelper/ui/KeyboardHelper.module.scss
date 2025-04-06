@@ -19,21 +19,22 @@
 
 .KeyboardContainer {
   display: flex;
-  flex-direction: row;
-}
-
-.activeKey {
-  background: blue;
-}
-
-.KeyboardContainer {
-  display: flex;
+  /* flex-direction: row; */
+  max-width: 1000px;
+  min-width: 600px;
   flex-direction: column;
   gap: 8px;
 }
 
 .row {
   display: flex;
+  /* justify-content: center; */
+  gap: 4px;
+}
+
+.centeredRow {
+  display: flex;
+  justify-content: center;
   gap: 4px;
 }
 
@@ -47,18 +48,146 @@
   border-radius: 4px;
   width: 50px;
   height: 50px;
+
 }
 
-.size_l {
-  width: 60px;
+.key.activeKey {
+  background: blue;
+  color: white;
+}
+
+.sm {
+  width: 50px;
+}
+
+.md {
+  width: 65px;
+}
+
+.lg {
+  width: 80px;
+}
+
+.xl {
+  width: 95px;
+}
+
+.xxl {
+  width: 110px;
+}
+
+.xxxl {
+  width: 460px;
 }
 
 .symbol {
-  font-size: 12px;
+  font-size: var(--font-size-m);
   line-height: 1;
+  padding-top: 3px
 }
 
-.activeKey {
-  background-color: #007bff;
-  color: white;
+
+@media (max-width: 850px) {
+  .KeyboardContainer {
+    display: flex;
+    /* flex-direction: row; */
+    max-width: 600px;
+    min-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  
+  .key {
+    padding: 4px 6px;
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .sm {
+    width: 40px;
+  }
+
+  .md {
+    width: 55px;
+  }
+
+  .lg {
+    width: 70px;
+  }
+
+  .xl {
+    width: 85px;
+  }
+
+  .xxl {
+    width: 100px;
+  }
+
+  .xxxl {
+    width: 400px;
+  }
+
+  .symbol {
+    font-size: var(--font-size-m);
+    line-height: 1;
+    padding-top: 3px
+  }
+
+
+}
+
+
+@media (max-width: 620px) {
+  .KeyboardContainer {
+    display: flex;
+    /* flex-direction: row; */
+    max-width: 400px;
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  
+  .key {
+    padding: 4px 6px;
+    border-radius: 4px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .sm {
+    width: 25px;
+  }
+
+  .md {
+    width: 35px;
+  }
+
+  .lg {
+    width: 45px;
+  }
+
+  .xl {
+    width: 50px;
+  }
+
+  .xxl {
+    width: 60px;
+  }
+
+  .xxxl {
+    width: 200px;
+  }
+
+  .symbol {
+    font-size: var(--font-size-s);
+    line-height: 1;
+    padding-top: 3px
+  }
+
+
 }
