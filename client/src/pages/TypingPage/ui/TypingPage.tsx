@@ -10,7 +10,7 @@ import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon/ui/Icon';
 import { KeyboardHelper } from '@/features/KeyboardHelper';
 
-const initSessionProgress = {lettersTyped: 0, mistakesCount: 0} 
+const initSessionProgress = {timeStamp: 0,lettersTyped: 0, mistakesCount: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 const TIME_BY_DEFAULT = 5
 export const TypingPage = () => {
@@ -19,7 +19,7 @@ export const TypingPage = () => {
   const [isSessionFinished, setIsSessionFinished] = useState(false);
   const [sessionResults, setSessionResults] = useState(initSessionProgress)
   const [isResultsVisible, setIsResultsVisible] = useState(false);
-
+  // const [sessionStarts, setSessionStats] = 
   const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(TIME_BY_DEFAULT); // 10 seconds countdown
     // Function to start the session when user types first letter
   const handleFirstKeyPress = () => {
@@ -49,9 +49,8 @@ export const TypingPage = () => {
     <div className={cls.TypingPage}>
       {
         isResultsVisible?
-          <div>
+          <div className={cls.StatsContainer}>
             <SessionStats
-              className={cls.StatsContainer}
               lettersTyped={sessionResults.lettersTyped}
               mistakesCount={sessionResults.mistakesCount}
               givenTime={TIME_BY_DEFAULT}
