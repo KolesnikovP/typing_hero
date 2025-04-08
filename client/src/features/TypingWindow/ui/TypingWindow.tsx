@@ -10,7 +10,16 @@ type TypingWindowProps = {
   typingText: string[];
   onFirstKeyPress: () => void;
   isSessionFinished: boolean;
-  onSessionFinish: (chars: number, mistakes: number) => void;
+  onSessionFinish: (
+    chars: number, 
+    mistakes: number,
+    logs: { 
+      timestamp: number; 
+      key: string;
+      isMistake: boolean
+    }[],
+    timeWhenSessionOver: number
+  ) => void;
   updateKeyboardHelperActiveKey?: (currentChar: string) => void;
 } 
 
@@ -32,6 +41,10 @@ export function TypingWindow(props: TypingWindowProps) {
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
   /* set focus on the typing div when component mounted */
+
+  const [keyLogs, setKeyLogs] = useState<
+  { timestamp: number; key: string; isMistake: boolean }[]
+>([]);
 
   useEffect(()=> {
 
@@ -57,7 +70,9 @@ export function TypingWindow(props: TypingWindowProps) {
   useEffect(() => {
     if(isSessionFinished) {
       console.log(currentLetterIndex, mistakenIndexes)
-      onSessionFinish(currentLetterIndex, mistakenIndexes.size)
+          console.log("Final logs", keyLogs);
+      const timeWhenSessionOver = Date.now();
+      onSessionFinish(currentLetterIndex, mistakenIndexes.size, keyLogs, timeWhenSessionOver)
     }
   }, [isSessionFinished])
 
@@ -80,7 +95,18 @@ export function TypingWindow(props: TypingWindowProps) {
 
     if(!canType && currentLetterIndex !== 0) return;
 
-    if(e.key !== typingText[currentLetterIndex]) {
+    const isMistake = e.key !== typingText[currentLetterIndex]
+
+    setKeyLogs(prev => [
+      ...prev,
+      {
+        timestamp: Date.now(),
+        key: e.key,
+        isMistake,
+      }
+    ]);
+
+    if(isMistake) {
       setMistakenIndexes(prev => new Set(prev).add(currentLetterIndex))
     } else {
       setCurrentLetterIndex(prev => prev + 1)

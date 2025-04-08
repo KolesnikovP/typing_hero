@@ -10,7 +10,8 @@ import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon/ui/Icon';
 import { KeyboardHelper } from '@/features/KeyboardHelper';
 
-const initSessionProgress = {timeStamp: 0,lettersTyped: 0, mistakesCount: 0} 
+type Logs = { timestamp: number; key: string; isMistake: boolean }
+const initSessionProgress = {lettersTyped: 0, mistakesCount: 0, logs: [], timeWhenSessionOver: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 const TIME_BY_DEFAULT = 5
 export const TypingPage = () => {
@@ -33,8 +34,10 @@ export const TypingPage = () => {
     setKeyboardHelperActiveKey(key)
 }
 
-  const onSessionFinish = (chars: number, mistakes: number) => {
-    setSessionResults(prev => ({...prev, lettersTyped: chars, mistakesCount: mistakes}))
+
+  const onSessionFinish = (chars: number, mistakes: number, logs: Logs[], timeWhenSessionOver: number) => {
+    console.log(timeWhenSessionOver, 'here tem is ')
+    setSessionResults(prev => ({...prev, lettersTyped: chars, mistakesCount: mistakes, timeWhenSessionOver: timeWhenSessionOver, logs}))
     setIsResultsVisible(true)
   }
 
@@ -54,6 +57,8 @@ export const TypingPage = () => {
               lettersTyped={sessionResults.lettersTyped}
               mistakesCount={sessionResults.mistakesCount}
               givenTime={TIME_BY_DEFAULT}
+              timeWhenSessionOver={sessionResults.timeWhenSessionOver}
+              logs={sessionResults.logs}
             />
             <Button 
               theme='clear'
