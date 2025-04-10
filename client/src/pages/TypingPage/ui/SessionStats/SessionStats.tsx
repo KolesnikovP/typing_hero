@@ -6,25 +6,24 @@ type SessionStatsProps = HTMLAttributes<HTMLDivElement> & {
   lettersTyped: number;
   mistakesCount: number;
   logs: {timestamp: number, key: string, isMistake: boolean}[];
-  givenTime: number;
+  sessionDurationInSeconds: number;
   timeWhenSessionOver: number;
+}
+const convertCharsInCpmAndWpm = (sessionDurationInSeconds: number, totalAmountOfTypedChars: number) => {
+  const timeInMinutes = sessionDurationInSeconds / 60
+  const cpm = totalAmountOfTypedChars / timeInMinutes;
+  const wpm = Math.floor(cpm / 5);
+
+  return {cpm, wpm};
 }
 
 export const SessionStats = (props : SessionStatsProps) => {
-  const {lettersTyped, givenTime, mistakesCount, logs, timeWhenSessionOver, ...otherProps} = props; 
-
-  const getCPM = useCallback(() => {
-    const timeInMinutes = givenTime / 60
-    const result = lettersTyped / timeInMinutes;
-    return result;
-  }, [lettersTyped, givenTime, mistakesCount])
-
-  const cpm = getCPM();
-  const wpm = Math.floor(cpm / 5);
-
+  const {lettersTyped, sessionDurationInSeconds, mistakesCount, logs, timeWhenSessionOver, ...otherProps} = props; 
+  const {cpm, wpm} = convertCharsInCpmAndWpm(sessionDurationInSeconds, lettersTyped)
+  console.log(cpm, wpm, "cpm wpm :::::")
   return (
     <div className={cls.Container} {...otherProps}>
-      letters typed: {lettersTyped} | made mistakes: {mistakesCount} | session time: {givenTime}s     
+      letters typed: {lettersTyped} | made mistakes: {mistakesCount} | session time: {sessionDurationInSeconds}s     
       <p>CPM: {cpm}</p> 
       <p>WPM: {wpm}</p> 
         <div>
@@ -35,7 +34,14 @@ export const SessionStats = (props : SessionStatsProps) => {
 }
 
 
-type TwoAxisGraphProps = {timeWhenSessionOver: number, logs: {timestamp: number, key: string, isMistake: boolean}[]}
+type TwoAxisGraphProps = {
+  timeWhenSessionOver: number,
+  logs: {
+    timestamp: number,
+    key: string,
+    isMistake: boolean
+  }[],
+}
 const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
   const {logs, timeWhenSessionOver} = props;
   const sessionDurationInSeconds = (timeWhenSessionOver - logs[0].timestamp) / 1000
@@ -70,12 +76,15 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
       if(normalizeTimestamps[i].timestamp >= interval) {
         charsTyped = logsInInterval.length;
         mistakesCount = logsInInterval.filter(el => el.isMistake).length 
+        const {cpm, wpm} = convertCharsInCpmAndWpm(intervalValue, charsTyped - mistakesCount)
 
         result.push({
           interval: interval,
           logsInInterval: logsInInterval,
           charsTyped: charsTyped,
-          mistakesCount: mistakesCount
+          mistakesCount: mistakesCount,
+          cpm: cpm,
+          wpm: wpm
         })
 
         interval += intervalValue;
@@ -87,11 +96,19 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
     }
 
     if(logsInInterval.length > 0 && interval > 0 && interval !== finish) {
+        const charsTyped = logsInInterval.length;
+        const mistakesCount = logsInInterval.filter(el => el.isMistake).length;
+      // im not sure it's right
+      const timeOfLastInterval = interval - finish;
+
+      const {cpm, wpm} = convertCharsInCpmAndWpm(timeOfLastInterval, charsTyped - mistakesCount)
       result.push({
         interval: finish,
         logsInInterval: logsInInterval,
-        charsTyped: logsInInterval.length,
-        mistakesCount: logsInInterval.filter(el => el.isMistake).length
+        charsTyped: charsTyped,
+        mistakesCount: mistakesCount,
+        cpm: cpm,
+        wpm: wpm,
      })
     }
 
@@ -118,9 +135,9 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="interval" />
-            <YAxis dataKey="charsTyped"/>
+            <YAxis dataKey="cpm"/>
             <Tooltip />
-            <Area type="monotone" dataKey="charsTyped" stroke="#8884d8" fill="#8884d8" />
+            <Area type="monotone" dataKey="cpm" stroke="#8884d8" fill="#8884d8" />
             <Area type="monotone" dataKey="mistakesCount" stroke="red" fill="red" />
           </AreaChart>
         </ResponsiveContainer>

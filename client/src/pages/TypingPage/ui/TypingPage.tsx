@@ -36,7 +36,6 @@ export const TypingPage = () => {
 
 
   const onSessionFinish = (chars: number, mistakes: number, logs: Logs[], timeWhenSessionOver: number) => {
-    console.log(timeWhenSessionOver, 'here tem is ')
     setSessionResults(prev => ({...prev, lettersTyped: chars, mistakesCount: mistakes, timeWhenSessionOver: timeWhenSessionOver, logs}))
     setIsResultsVisible(true)
   }
@@ -56,7 +55,7 @@ export const TypingPage = () => {
             <SessionStats
               lettersTyped={sessionResults.lettersTyped}
               mistakesCount={sessionResults.mistakesCount}
-              givenTime={TIME_BY_DEFAULT}
+              sessionDurationInSeconds={TIME_BY_DEFAULT}
               timeWhenSessionOver={sessionResults.timeWhenSessionOver}
               logs={sessionResults.logs}
             />
