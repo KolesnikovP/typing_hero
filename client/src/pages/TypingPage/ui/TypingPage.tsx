@@ -13,7 +13,7 @@ import { KeyboardHelper } from '@/features/KeyboardHelper';
 type Logs = { timestamp: number; key: string; isMistake: boolean }
 const initSessionProgress = {lettersTyped: 0, mistakesCount: 0, logs: [], timeWhenSessionOver: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
-const TIME_BY_DEFAULT = 5
+const TIME_BY_DEFAULT = 15
 export const TypingPage = () => {
   const [keyboardHelperActiveKey, setKeyboardHelperActiveKey] = useState(mockedText[0])
   const [isSessionStarted, setIsSessionStarted] = useState(false);

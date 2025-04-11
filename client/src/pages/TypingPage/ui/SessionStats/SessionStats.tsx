@@ -1,6 +1,5 @@
-import { HTMLAttributes, useCallback, useEffect, useRef, useState } from 'react'
-import * as d3 from 'd3'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { HTMLAttributes, useRef } from 'react'
+import { Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Scatter, ComposedChart } from 'recharts';
 import cls from './SessionStats.module.scss'
 type SessionStatsProps = HTMLAttributes<HTMLDivElement> & {
   lettersTyped: number;
@@ -42,6 +41,15 @@ type TwoAxisGraphProps = {
     isMistake: boolean
   }[],
 }
+
+type PreparedDataType = {
+          interval: number,
+          logsInInterval: {timestamp: number, key: string, isMistake: boolean}[],
+          charsTyped: number,
+          mistakesCount: number,
+          cpm: number,
+          wpm: number
+}
 const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
   const {logs, timeWhenSessionOver} = props;
   const sessionDurationInSeconds = (timeWhenSessionOver - logs[0].timestamp) / 1000
@@ -63,7 +71,7 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
     let start = normalizeTimestamps[0].timestamp;
     let finish = Math.ceil(normalizeTimestamps[normalizeTimestamps.length - 1].timestamp)
 
-    const result = [];
+    const result: PreparedDataType[] = [];
     let logsInInterval = []
     let charsTyped = 0;
     let mistakesCount = 0;
@@ -117,29 +125,31 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
 
   const normalizedData = normalizeTimestamps(logs)
   const preparedDataForChart = groupByInterval(2, normalizedData)
-  console.log('group by interval', groupByInterval(2, normalizedData))
-  console.log('=+++++++++++++++', normalizeTimestamps(logs))
+
   return (
     <div className={cls.graphWrapper}>
       <ResponsiveContainer width="80%" height={300}>
-          <AreaChart
+          <ComposedChart
             width={500}
             height={400}
             data={preparedDataForChart}
             margin={{
               top: 10,
-              right: 30,
+              right: 0,
               left: 0,
               bottom: 0,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="interval" />
-            <YAxis dataKey="cpm"/>
+            <YAxis orientation='left' dataKey='cpm'/> 
+            <YAxis orientation='right' />
             <Tooltip />
+
             <Area type="monotone" dataKey="cpm" stroke="#8884d8" fill="#8884d8" />
             <Area type="monotone" dataKey="mistakesCount" stroke="red" fill="red" />
-          </AreaChart>
+            <Scatter name="mistake" type="number" dataKey="mistakesCount" fill="red" />
+          </ComposedChart>
         </ResponsiveContainer>
     </div>
 
