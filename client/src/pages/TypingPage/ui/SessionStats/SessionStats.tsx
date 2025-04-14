@@ -53,7 +53,6 @@ type PreparedDataType = {
 const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
   const {logs, timeWhenSessionOver} = props;
   const sessionDurationInSeconds = (timeWhenSessionOver - logs[0].timestamp) / 1000
-  const ref = useRef(null);
 
   const normalizeTimestamps = (logs: {timestamp: number, key: string, isMistake: boolean}[]) => {
     if (logs.length === 0) return [];
