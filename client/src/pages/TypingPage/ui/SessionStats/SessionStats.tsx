@@ -1,4 +1,4 @@
-import { HTMLAttributes, useRef } from 'react'
+import { HTMLAttributes } from 'react'
 import { Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Scatter, ComposedChart } from 'recharts';
 import cls from './SessionStats.module.scss'
 type SessionStatsProps = HTMLAttributes<HTMLDivElement> & {
@@ -67,7 +67,7 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
 
   const groupByInterval = (intervalValue: number, normalizeTimestamps: {timestamp: number, key: string, isMistake: boolean}[]) => {
     let interval = intervalValue;
-    let start = normalizeTimestamps[0].timestamp;
+    // let start = normalizeTimestamps[0].timestamp;
     let finish = Math.ceil(normalizeTimestamps[normalizeTimestamps.length - 1].timestamp)
 
     const result: PreparedDataType[] = [];
