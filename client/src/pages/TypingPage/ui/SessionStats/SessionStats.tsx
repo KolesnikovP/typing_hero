@@ -1,5 +1,5 @@
 import { HTMLAttributes } from 'react'
-import { Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Scatter, ComposedChart } from 'recharts';
+import { Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Scatter, ComposedChart, ReferenceLine } from 'recharts';
 import cls from './SessionStats.module.scss'
 type SessionStatsProps = HTMLAttributes<HTMLDivElement> & {
   lettersTyped: number;
@@ -139,15 +139,11 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
               bottom: 0,
             }}
           >
-            <CartesianGrid strokeDasharray="3 3" />
+            <CartesianGrid strokeDasharray="3 5" />
             <XAxis dataKey="interval" />
             <YAxis orientation='left' dataKey='cpm'/> 
-            <YAxis orientation='right' />
             <Tooltip />
-
             <Area type="monotone" dataKey="cpm" stroke="#8884d8" fill="#8884d8" />
-            <Area type="monotone" dataKey="mistakesCount" stroke="red" fill="red" />
-            <Scatter name="mistake" type="number" dataKey="mistakesCount" fill="red" />
           </ComposedChart>
         </ResponsiveContainer>
     </div>
