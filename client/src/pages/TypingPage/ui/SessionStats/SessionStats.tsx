@@ -94,6 +94,7 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
           wpm: wpm
         })
 
+
         interval += intervalValue;
         logsInInterval = []
 
