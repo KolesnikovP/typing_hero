@@ -94,7 +94,6 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
           wpm: wpm
         })
 
-
         interval += intervalValue;
         logsInInterval = []
 
@@ -102,7 +101,6 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
         mistakesCount = 0;
       }
     }
-
 
     if(logsInInterval.length > 0 && interval > 0 && interval !== finish) {
         const charsTyped = logsInInterval.length;
