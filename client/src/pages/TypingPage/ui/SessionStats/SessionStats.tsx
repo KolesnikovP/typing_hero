@@ -102,7 +102,6 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
       }
     }
 
-
     if(logsInInterval.length > 0 && interval > 0 && interval !== finish) {
         const charsTyped = logsInInterval.length;
         const mistakesCount = logsInInterval.filter(el => el.isMistake).length;
