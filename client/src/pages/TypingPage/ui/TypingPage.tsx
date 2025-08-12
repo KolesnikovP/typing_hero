@@ -76,10 +76,6 @@ export const TypingPage = () => {
           <>
             <div>
               <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
-              <div>
-                <button onClick={startCountdown}>Start</button>
-                <button onClick={resetCountdown}>Reset</button>
-              </div>
             </div>
             <TypingWindow
               canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
@@ -92,6 +88,10 @@ export const TypingPage = () => {
             /> 
 
             <KeyboardHelper activeKey={keyboardHelperActiveKey}/>
+              <div className={cls.ButtonsGroup}>
+                <button className={cls.Button} onClick={startCountdown}>Start</button>
+                <button className={cls.Button} onClick={resetCountdown}>Reset</button>
+              </div>
           </>
       }
     </div>
