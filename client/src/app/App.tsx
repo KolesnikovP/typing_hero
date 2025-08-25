@@ -22,9 +22,7 @@ function App() {
         <div className="content-page">
           {inited && <AppRouter/>}
         </div>
-
       </Suspense>
-
     </div>
   )
 }
