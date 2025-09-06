@@ -14,6 +14,8 @@ import { getLoginError } from '../../model/selectors/getLoginError/getLoginError
 import { loginByUsername } from '../../model/services/loginByUsername/loginByUsername';
 import { loginActions, loginReducer } from '../../model/slice/loginSlice';
 import cls from './LoginForm.module.scss';
+import { GoogleLogin } from '@react-oauth/google';
+import { loginWithGoogle } from '../../model/services/loginWithGoogle/loginWithGoogle';
 
 export interface LoginFormProps {
     className?: string;
@@ -47,6 +49,17 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
         }
     }, [onSuccess, dispatch, password, username]);
 
+    const onGoogleLoginSuccess = useCallback(async (credentialResponse: any) => {
+        const result = await dispatch(loginWithGoogle({ idToken: credentialResponse.credential }));
+        if (result.meta.requestStatus === 'fulfilled') {
+            onSuccess();
+        }
+    }, [dispatch, onSuccess]);
+
+    const onGoogleLoginError = useCallback(() => {
+        console.log('Google Login Failed');
+    }, []);
+
   return (
     <DynamicModuleLoader
       removeAfterUnmount
@@ -76,6 +89,10 @@ const LoginForm = memo(({ className, onSuccess }: LoginFormProps) => {
         >
           Войти
         </Button>
+        <GoogleLogin
+            onSuccess={onGoogleLoginSuccess}
+            onError={onGoogleLoginError}
+        />
       </div>
     </DynamicModuleLoader>
     );
