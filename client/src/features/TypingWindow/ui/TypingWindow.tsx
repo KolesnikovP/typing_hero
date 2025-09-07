@@ -46,6 +46,11 @@ export function TypingWindow(props: TypingWindowProps) {
   { timestamp: number; key: string; isMistake: boolean }[]
 >([]);
 
+  const handleFocusRestore = () => {
+    containerRef?.current?.focus();
+    setIsFocusOnDiv(true); // Manually update focus state
+  };
+
   useEffect(()=> {
 
     const container = containerRef.current;
@@ -58,6 +63,28 @@ export function TypingWindow(props: TypingWindowProps) {
   useEffect(() => {
     updateKeyboardHelperActiveKey && updateKeyboardHelperActiveKey(typingText[currentLetterIndex])
   }, [currentLetterIndex])
+
+  // Add global keyboard listener to restore focus when typing window is not focused
+  useEffect(() => {
+    const handleGlobalKeyPress = (e: Event) => {
+      const keyboardEvent = e as globalThis.KeyboardEvent;
+      // Only restore focus if the typing window is not currently focused
+      // and it's not an ignored key
+      if (!isFocusOnDiv && !ignoreKeysList.has(keyboardEvent.key)) {
+        e.preventDefault(); // Prevent the key from being processed elsewhere
+        handleFocusRestore();
+      }
+    };
+
+    // Add event listener when typing window is not focused
+    if (!isFocusOnDiv) {
+      document.addEventListener('keydown', handleGlobalKeyPress);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleGlobalKeyPress);
+    };
+  }, [isFocusOnDiv]);
 
  function onFocusHandler() {
     setIsFocusOnDiv(true);
@@ -126,7 +153,8 @@ export function TypingWindow(props: TypingWindowProps) {
       {
         !isFocusOnDiv && 
           <div 
-            onClick={() => containerRef?.current?.focus()} className={cls.focusPopup}>
+            onClick={handleFocusRestore} 
+            className={cls.focusPopup}>
             Press here or click any button to return focus
           </div>
       }
