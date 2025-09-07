@@ -35,6 +35,7 @@ export function TypingWindow(props: TypingWindowProps) {
  
   const [currentLetterIndex, setCurrentLetterIndex] = useState(0);
   const [mistakenIndexes, setMistakenIndexes] = useState(new Set<number>());
+  const [correctedIndexes, setCorrectedIndexes] = useState(new Set<number>());
   const [isFocusOnDiv, setIsFocusOnDiv] = useState(false);
   const [isFirstKeyPressed, setIsFirstKeyPressed] = useState(false);
  
@@ -136,6 +137,10 @@ export function TypingWindow(props: TypingWindowProps) {
     if(isMistake) {
       setMistakenIndexes(prev => new Set(prev).add(currentLetterIndex))
     } else {
+      // Check if this position was previously mistaken
+      if(mistakenIndexes.has(currentLetterIndex)) {
+        setCorrectedIndexes(prev => new Set(prev).add(currentLetterIndex))
+      }
       setCurrentLetterIndex(prev => prev + 1)
     }
 
@@ -174,6 +179,7 @@ export function TypingWindow(props: TypingWindowProps) {
             isPointerOn={index === currentLetterIndex }
             isTyped={currentLetterIndex <= index}
             isMistakenKey={mistakenIndexes.has(index)} // Check if this index was mistaken
+            isCorrectedMistake={correctedIndexes.has(index)} // Check if this mistake was corrected
           >
             {el === ' ' ? '\u00A0' : el}
           </CustomSpan>

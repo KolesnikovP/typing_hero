@@ -23,6 +23,12 @@
   color: #f28482;
 }
 
+.CorrectedMistake {
+  color: #84c5a8;
+  // background-color: rgba(132, 197, 168, 0.2);
+  border-radius: 3px;
+}
+
 @keyframes pulse {
   0% {
     border-bottom: 2px solid rgba(var(--secondary-color-rgb), 1);
