@@ -1,4 +1,10 @@
 @use "sass:color";
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
 .label {
   font-size: 0.875rem; /* text-sm */
   line-height: 1.5rem; /* /6 */
@@ -32,11 +38,5 @@
   &:focus {
     outline: none;
     border: 1.5px solid rgba(var(--secondary-color-rgb), 0.7);
-  }
-
-  &[data-focus] {
-    outline-width: 2px;
-    outline-offset: -2px;
-    /* outline-color: rgba(255, 255, 255, 0.25); /* outline-white/25 */ 
   }
 }

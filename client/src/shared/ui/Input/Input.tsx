@@ -4,7 +4,7 @@ import  {
 } from 'react';
 import { classNames, Mods } from '@/shared/lib/classNames/classNames';
 import cls from './Input.module.scss';
-import { Description, Field, Input as HeadlessInput, Label } from '@headlessui/react';
+import * as Label from '@radix-ui/react-label';
 
 type HTMLInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'readOnly'>
 
@@ -56,28 +56,27 @@ export const Input = memo((props: InputProps) => {
     };
 
   return (
-    <Field>
-      {label &&
-      <Label className={cls.label}>
-        {label} 
-      </Label>
-      }
-      {description &&
-        <Description className={cls.description}>
-          Use your real name so people will recognize you
-        </Description>
-      }
-      <HeadlessInput
+    <div className={cls.field}>
+      {label && (
+        <Label.Root className={cls.label} htmlFor={otherProps.id}>
+          {label} 
+        </Label.Root>
+      )}
+      {description && (
+        <div className={cls.description}>
+          {description}
+        </div>
+      )}
+      <input
         ref={ref}
         type={type}
         value={value}
-        name="full_name"
         onChange={onChangeHandler}
         onBlur={onBlur}
         onFocus={onFocus}
         className={classNames(cls.input, mods, [])}
         {...otherProps}
       />
-    </Field>
+    </div>
   );
 });

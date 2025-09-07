@@ -1,7 +1,9 @@
 // GitHub-style dropdown menu based on screenshot
 .menu {
   position: relative;
-  display: inline-block;
+    background-color: var(--hover-bg);
+    box-shadow: 0 0 0 2px var(--accent-color, rgba(3, 102, 214, 0.3));
+    box-shadow: 0 0 0 2px var(--accent-color, rgba(3, 102, 214, 0.3));
 }
 
 .menuButton {
@@ -17,27 +19,12 @@
   font-weight: 500;
   cursor: pointer;
   border-radius: 6px;
-  transition: background-color 0.2s ease-in-out;
+ // transition: background-color 0.2s ease-in-out;
 
-  &:hover {
-    background-color: rgba(var(--secondary-color-rgb), 0.1);
-  }
-
-  &:focus {
-    outline: none;
-  }
-
-  // HeadlessUI specific override (keep this as it's library-specific)
-  &[data-headlessui-state] {
-    outline: none !important;
-    box-shadow: none !important;
-  }
 }
 
 .menuItems {
-  position: absolute;
   z-index: 1000;
-  margin-top: 4px;
   min-width: 180px;
   max-width: 300px;
   padding: 8px 4px;

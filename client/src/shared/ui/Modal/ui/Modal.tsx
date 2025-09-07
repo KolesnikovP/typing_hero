@@ -1,4 +1,4 @@
-import { Description, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
+import * as Dialog from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'framer-motion';
 import styles from './Modal.module.scss';
 import { JSX } from 'react';
@@ -9,49 +9,54 @@ type ModalProps = HTMLDivElement & {
   children: JSX.Element;
   isOpen: boolean;
   onClose: () => void;
+  lazy?: boolean; // For compatibility with existing usage
 }
 
 function Modal(props: ModalProps) {
   const {title, description, isOpen, onClose, children} = props;
 
   return (
-    <>
-      <AnimatePresence>
-        {isOpen && (
-          <Dialog static open={isOpen} onClose={onClose} >
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className={styles.overlay}
-            />
-            <div className={styles.container}>
-              <DialogPanel
-                as={motion.div}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className={styles.panel}
-              >
-                {
-                title &&
-                <DialogTitle className={styles.title}>
-                  {title}
-                </DialogTitle>
-                }
+    <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <Dialog.Portal>
+        <AnimatePresence>
+          {isOpen && (
+            <>
+              <Dialog.Overlay asChild>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className={styles.overlay}
+                />
+              </Dialog.Overlay>
+              <div className={styles.container}>
+                <Dialog.Content asChild>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    className={styles.panel}
+                  >
+                    {title && (
+                      <Dialog.Title className={styles.title}>
+                        {title}
+                      </Dialog.Title>
+                    )}
 
-                {description &&
-                <Description className={styles.description}>
-                  {description} 
-                </Description>
-                }
-                {children}
-              </DialogPanel>
-            </div>
-          </Dialog>
-        )}
-      </AnimatePresence>
-    </>
+                    {description && (
+                      <Dialog.Description className={styles.description}>
+                        {description} 
+                      </Dialog.Description>
+                    )}
+                    {children}
+                  </motion.div>
+                </Dialog.Content>
+              </div>
+            </>
+          )}
+        </AnimatePresence>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }
 
