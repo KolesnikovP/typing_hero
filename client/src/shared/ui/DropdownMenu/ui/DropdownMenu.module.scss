@@ -1,9 +1,7 @@
 // GitHub-style dropdown menu based on screenshot
 .menu {
   position: relative;
-    background-color: var(--hover-bg);
-    box-shadow: 0 0 0 2px var(--accent-color, rgba(3, 102, 214, 0.3));
-    box-shadow: 0 0 0 2px var(--accent-color, rgba(3, 102, 214, 0.3));
+  display: inline-block;
 }
 
 .menuButton {
