@@ -43,6 +43,7 @@ export const Header = () => {
           <DropdownMenu
             buttonContent={<Icon Svg={UserIcon}/>}
             items={[
+              { id: 'home', label: 'Home', href: '/' },
               { id: 'profile', label: 'Profile', href: '/profile' },
               { id: 'settings', label: 'Settings', onClick: () => console.log('Settings') },
               'separator',
