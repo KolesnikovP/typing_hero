@@ -16,6 +16,34 @@ select {
     font: inherit;
 }
 
+button:focus,
+button:focus-visible,
+button:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Specifically target HeadlessUI MenuButton */
+[data-headlessui-state]:focus,
+[data-headlessui-state]:focus-visible,
+[data-headlessui-state]:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Override any browser focus rings */
+*:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+*:focus-visible {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 a {
     text-decoration: none;
 }

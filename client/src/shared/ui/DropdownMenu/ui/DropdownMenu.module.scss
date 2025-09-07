@@ -20,12 +20,17 @@
   transition: background-color 0.2s ease-in-out;
 
   &:hover {
-    background-color: var(--hover-bg);
+    background-color: rgba(var(--secondary-color-rgb), 0.1);
   }
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px var(--accent-color, rgba(3, 102, 214, 0.3));
+  }
+
+  // HeadlessUI specific override (keep this as it's library-specific)
+  &[data-headlessui-state] {
+    outline: none !important;
+    box-shadow: none !important;
   }
 }
 

@@ -14,9 +14,11 @@ import (
 )
 
 type User struct {
-	ID    string `json:"id"`
-	Email string `json:"email"`
-	Name  string `json:"name"`
+	ID       string `json:"id"`
+	Email    string `json:"email"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Avatar   string `json:"avatar"`
 }
 
 type UserStore struct {
@@ -35,17 +37,71 @@ func (s *UserStore) GetOrCreateUser(email, name string) (*User, error) {
 	defer s.mu.Unlock()
 
 	if user, ok := s.users[email]; ok {
-		return user,
-			nil
+		return user, nil
 	}
 
 	user := &User{
-		ID:    fmt.Sprintf("user-%d", len(s.users)+1),
-		Email: email,
-		Name:  name,
+		ID:       fmt.Sprintf("user-%d", len(s.users)+1),
+		Email:    email,
+		Name:     name,
+		Username: email, // Default username to email
+		Avatar:   "",
 	}
 	s.users[email] = user
 	return user, nil
+}
+
+func (s *UserStore) GetUserByID(userID string) (*User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	for _, user := range s.users {
+		if user.ID == userID {
+			return user, nil
+		}
+	}
+	return nil, fmt.Errorf("user not found")
+}
+
+func (s *UserStore) UpdateUser(userID string, updates map[string]interface{}) (*User, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	var targetUser *User
+	for _, user := range s.users {
+		if user.ID == userID {
+			targetUser = user
+			break
+		}
+	}
+
+	if targetUser == nil {
+		return nil, fmt.Errorf("user not found")
+	}
+
+	// Update fields if provided
+	if username, ok := updates["username"]; ok {
+		if usernameStr, isString := username.(string); isString {
+			targetUser.Username = usernameStr
+		}
+	}
+	if name, ok := updates["name"]; ok {
+		if nameStr, isString := name.(string); isString {
+			targetUser.Name = nameStr
+		}
+	}
+	if email, ok := updates["email"]; ok {
+		if emailStr, isString := email.(string); isString {
+			targetUser.Email = emailStr
+		}
+	}
+	if avatar, ok := updates["avatar"]; ok {
+		if avatarStr, isString := avatar.(string); isString {
+			targetUser.Avatar = avatarStr
+		}
+	}
+
+	return targetUser, nil
 }
 
 var userStore = NewUserStore()
@@ -103,6 +159,41 @@ func googleAuthHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Responded to /auth/google with user data for %s", email)
 }
 
+func updateUserHandler(w http.ResponseWriter, r *http.Request) {
+	log.Printf("Received /users/{id} request. Method: %s", r.Method)
+
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if userID == "" {
+		http.Error(w, "User ID is required", http.StatusBadRequest)
+		return
+	}
+
+	var updates map[string]interface{}
+	err := json.NewDecoder(r.Body).Decode(&updates)
+	if err != nil {
+		log.Printf("Invalid request body: %v", err)
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	user, err := userStore.UpdateUser(userID, updates)
+	if err != nil {
+		log.Printf("Error updating user: %v", err)
+		if err.Error() == "user not found" {
+			http.Error(w, "User not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
+	log.Printf("Updated user %s successfully", userID)
+}
+
 func main() {
 	router := mux.NewRouter()
 
@@ -112,6 +203,7 @@ func main() {
 	}).Methods("GET")
 
 	router.HandleFunc("/auth/google", googleAuthHandler).Methods("POST")
+	router.HandleFunc("/users/{id}", updateUserHandler).Methods("PUT")
 
 	// CORS middleware
 	c := cors.New(cors.Options{
