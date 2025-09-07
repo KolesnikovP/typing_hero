@@ -4,6 +4,7 @@ import UserIcon from '@shared/assets/icons/user.svg'
 import BellIcon from '@shared/assets/icons/bell.svg'
 import { useCallback, useState } from 'react'
 import { Button } from '@/shared/ui/Button'
+import { DropdownMenu } from '@/shared/ui/DropdownMenu'
 import { LoginModal } from '@/features/AuthByUsername'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, userActions } from '@/entities/User'
@@ -39,9 +40,17 @@ export const Header = () => {
             <Icon Svg={BellIcon}/>
           </Button>
           <LoginModal isOpen={isAuthModalOpen} onClose={onAuthCloseModal}/>
-          <Button theme='clear' onClick={onLogout}>
-            LOGOUT
-          </Button>
+          <DropdownMenu
+            buttonContent={<Icon Svg={UserIcon}/>}
+            items={[
+              { id: 'profile', label: 'Profile', href: '/profile' },
+              { id: 'settings', label: 'Settings', onClick: () => console.log('Settings') },
+              'separator',
+              { id: 'logout', label: 'Logout', onClick: onLogout, destructive: true }
+            ]}
+            align="right"
+            direction="bottom"
+          />
         </div>
       </header>
     )
