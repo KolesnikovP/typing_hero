@@ -9,19 +9,22 @@ import ReloadIcon from '@shared/assets/icons/reload.svg'
 import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon/ui/Icon';
 import { KeyboardHelper } from '@/features/KeyboardHelper';
+import { TimeSelector, getStoredTime, type TimeInterval } from './TimeSelector';
 
 type Logs = { timestamp: number; key: string; isMistake: boolean }
-const initSessionProgress = {lettersTyped: 0, mistakesCount: 0, logs: [], timeWhenSessionOver: 0} 
+const initSessionProgress = {lettersTyped: 0, mistakesCount: 0, logs: [] as Logs[], timeWhenSessionOver: 0} 
 const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
-const TIME_BY_DEFAULT = 5
+
+
 export const TypingPage = () => {
   const [keyboardHelperActiveKey, setKeyboardHelperActiveKey] = useState(mockedText[0])
   const [isSessionStarted, setIsSessionStarted] = useState(false);
   const [isSessionFinished, setIsSessionFinished] = useState(false);
   const [sessionResults, setSessionResults] = useState(initSessionProgress)
   const [isResultsVisible, setIsResultsVisible] = useState(false);
-  // const [sessionStarts, setSessionStats] = 
-  const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(TIME_BY_DEFAULT); // 10 seconds countdown
+  const [selectedTime, setSelectedTime] = useState<TimeInterval>(getStoredTime());
+  
+  const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(selectedTime);
     // Function to start the session when user types first letter
   const handleFirstKeyPress = () => {
     if (!isSessionStarted) {
@@ -55,7 +58,7 @@ export const TypingPage = () => {
             <SessionStats
               lettersTyped={sessionResults.lettersTyped}
               mistakesCount={sessionResults.mistakesCount}
-              sessionDurationInSeconds={TIME_BY_DEFAULT}
+              sessionDurationInSeconds={selectedTime}
               timeWhenSessionOver={sessionResults.timeWhenSessionOver}
               logs={sessionResults.logs}
             />
@@ -88,10 +91,17 @@ export const TypingPage = () => {
             /> 
 
             <KeyboardHelper activeKey={keyboardHelperActiveKey}/>
-              <div className={cls.ButtonsGroup}>
-                <button className={cls.Button} onClick={startCountdown}>Start</button>
-                <button className={cls.Button} onClick={resetCountdown}>Reset</button>
-              </div>
+            
+            <TimeSelector 
+              selectedTime={selectedTime}
+              onTimeChange={setSelectedTime}
+              disabled={isSessionStarted}
+            />
+
+            <div className={cls.ButtonsGroup}>
+              <button className={cls.Button} onClick={startCountdown}>Start</button>
+              <button className={cls.Button} onClick={resetCountdown}>Reset</button>
+            </div>
           </>
       }
     </div>

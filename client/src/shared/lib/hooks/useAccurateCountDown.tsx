@@ -9,6 +9,13 @@ export default function useAccurateCountdown(initialTime: number): UseAccurateCo
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const [isRunning, setIsRunning] = useState(false);
 
+  // Update timeLeft when initialTime changes (only when not running)
+  useEffect(() => {
+    if (!isRunning) {
+      setTimeLeft(initialTime);
+    }
+  }, [initialTime, isRunning]);
+
   useEffect(() => {
     if (!isRunning) return;
 
