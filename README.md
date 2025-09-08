@@ -59,6 +59,13 @@
 1. **Start the backend server**
    ```bash
    cd backend/src/typing_hero
+   # Required for Google OAuth
+   export GOOGLE_CLIENT_ID="<your-google-oauth-client-id>"
+   # Optional overrides
+   export FRONTEND_ORIGIN="http://localhost:5173"   # CORS allowlist
+   export DB_PATH="typinghero.db"                    # SQLite file path
+   export PORT=8080                                   # Server port
+
    go run main.go
    ```
    The backend will run on `http://localhost:8080`
@@ -110,7 +117,9 @@ The application uses build-time constants defined in `vite.config.ts`:
 To enable Google authentication:
 1. Create a Google Cloud project
 2. Enable the Google Identity API
-3. Update the client ID in `backend/src/typing_hero/main.go`
+3. Set `VITE_GOOGLE_CLIENT_ID` in the frontend env (e.g., `client/.env`) and set `GOOGLE_CLIENT_ID` in the backend environment. The backend will look for `.env` in:
+   - `backend/src/typing_hero/.env` (recommended)
+   - Or parent dirs if you run from another working dir (it tries `../.env`, `../../.env`, `../../../.env`).
 
 ## 🤝 Contributing
 

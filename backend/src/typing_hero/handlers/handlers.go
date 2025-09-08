@@ -1,29 +1,30 @@
 package handlers
 
 import (
-	"context"
-	"encoding/json"
-	"fmt"
-	"log"
-	"net/http"
-	"time"
+    "context"
+    "encoding/json"
+    "fmt"
+    "log"
+    "net/http"
+    "os"
+    "time"
 
-	"google.golang.org/api/idtoken"
+    "google.golang.org/api/idtoken"
 
-	"github.com/KolesnikovP/typing_hero/models"
-	"github.com/KolesnikovP/typing_hero/store"
-	"github.com/gorilla/mux"
+    "github.com/KolesnikovP/typing_hero/models"
+    "github.com/KolesnikovP/typing_hero/store"
+    "github.com/gorilla/mux"
 )
 
 // GoogleAuthHandler handles Google authentication requests.
 func GoogleAuthHandler(userStore *store.UserStore) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Received /auth/google request. Method: %s", r.Method)
-		if r.Method != http.MethodPost {
-			log.Printf("Invalid method for /auth/google. Expected POST, got %s", r.Method)
-			http.Error(w, "Only POST requests are allowed", http.StatusMethodNotAllowed)
-			return
-		}
+    return func(w http.ResponseWriter, r *http.Request) {
+        log.Printf("Received /auth/google request. Method: %s", r.Method)
+        if r.Method != http.MethodPost {
+            log.Printf("Invalid method for /auth/google. Expected POST, got %s", r.Method)
+            http.Error(w, "Only POST requests are allowed", http.StatusMethodNotAllowed)
+            return
+        }
 
 		var requestBody struct {
 			Token string `json:"token"`
@@ -36,20 +37,24 @@ func GoogleAuthHandler(userStore *store.UserStore) http.HandlerFunc {
 			return
 		}
 
-		log.Printf("Request body token (first 10 chars): %s...", requestBody.Token[:min(len(requestBody.Token), 10)])
-		if requestBody.Token == "" {
-			http.Error(w, "ID token is missing", http.StatusBadRequest)
-			return
-		}
+        if requestBody.Token == "" {
+            http.Error(w, "ID token is missing", http.StatusBadRequest)
+            return
+        }
 
-		// TODO: Replace with your actual Google Client ID
-		clientID := "438368812544-uc3sdm9o25musceebgoras294j9vh5ki.apps.googleusercontent.com"
+        // Read Google Client ID from environment
+        clientID := os.Getenv("GOOGLE_CLIENT_ID")
+        if clientID == "" {
+            log.Printf("GOOGLE_CLIENT_ID is not set")
+            http.Error(w, "Server misconfiguration", http.StatusInternalServerError)
+            return
+        }
 
-		payload, err := idtoken.Validate(context.Background(), requestBody.Token, clientID)
-		// If you have a list of audience values, you can pass them as extra arguments.
-		// E.g. "foo.example.com", "bar.example.com"
-		if err != nil {
-			log.Printf("Error validating ID token: %v", err)
+        payload, err := idtoken.Validate(context.Background(), requestBody.Token, clientID)
+        // If you have a list of audience values, you can pass them as extra arguments.
+        // E.g. "foo.example.com", "bar.example.com"
+        if err != nil {
+            log.Printf("Error validating ID token: %v", err)
 			http.Error(w, "Internal server error", http.StatusInternalServerError)
 			return
 		}
@@ -107,12 +112,12 @@ func SubmitResultHandler(userStore *store.UserStore) http.HandlerFunc {
 
 // GetUserHandler fetches a user's data by ID.
 func GetUserHandler(userStore *store.UserStore) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		log.Printf("Received /user/{id} request. Method: %s", r.Method)
-		if r.Method != http.MethodGet {
-			http.Error(w, "Only GET requests are allowed", http.StatusMethodNotAllowed)
-			return
-		}
+    return func(w http.ResponseWriter, r *http.Request) {
+        log.Printf("Received /user/{id} request. Method: %s", r.Method)
+        if r.Method != http.MethodGet {
+            http.Error(w, "Only GET requests are allowed", http.StatusMethodNotAllowed)
+            return
+        }
 
 		vars := mux.Vars(r)
 		userID := vars["id"]
@@ -129,7 +134,43 @@ func GetUserHandler(userStore *store.UserStore) http.HandlerFunc {
 		}
 
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(user)
-		log.Printf("Successfully fetched user data for ID: %s", userID)
-	}
+        json.NewEncoder(w).Encode(user)
+        log.Printf("Successfully fetched user data for ID: %s", userID)
+    }
+}
+
+// UpdateUserHandler updates a user's profile fields.
+func UpdateUserHandler(userStore *store.UserStore) http.HandlerFunc {
+    return func(w http.ResponseWriter, r *http.Request) {
+        log.Printf("Received /users/{id} request. Method: %s", r.Method)
+        if r.Method != http.MethodPut {
+            http.Error(w, "Only PUT requests are allowed", http.StatusMethodNotAllowed)
+            return
+        }
+
+        vars := mux.Vars(r)
+        userID := vars["id"]
+        if userID == "" {
+            http.Error(w, "User ID is missing", http.StatusBadRequest)
+            return
+        }
+
+        var updates map[string]interface{}
+        if err := json.NewDecoder(r.Body).Decode(&updates); err != nil {
+            log.Printf("Invalid request body for /users/{id}: %v", err)
+            http.Error(w, "Invalid request body", http.StatusBadRequest)
+            return
+        }
+
+        updated, err := userStore.UpdateUser(userID, updates)
+        if err != nil {
+            log.Printf("Error updating user: %v", err)
+            http.Error(w, "Failed to update user", http.StatusInternalServerError)
+            return
+        }
+
+        w.Header().Set("Content-Type", "application/json")
+        json.NewEncoder(w).Encode(updated)
+        log.Printf("Updated user %s successfully", userID)
+    }
 }
