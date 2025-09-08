@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes } from 'react'
+import { forwardRef, HTMLAttributes } from 'react'
 import cls from './CustomSpan.module.scss'
 import { classNames } from '@/shared/lib/classNames/classNames'
 
@@ -9,7 +9,7 @@ type CustomSpanProps = HTMLAttributes<HTMLSpanElement> & {
   isCorrectedMistake?: boolean,
 }
 
-export const CustomSpan: FC<CustomSpanProps> = (props) => {
+export const CustomSpan = forwardRef<HTMLSpanElement, CustomSpanProps>((props, ref) => {
   const {children, isPointerOn, isTyped, isMistakenKey = false, isCorrectedMistake = false, ...restProps} = props
   let mods = {
     [cls.ActivePointer]: isPointerOn,
@@ -18,8 +18,8 @@ export const CustomSpan: FC<CustomSpanProps> = (props) => {
     [cls.CorrectedMistake]: isCorrectedMistake,
   }
   return (
-    <span className={classNames(cls.Container, mods, [])} {...restProps}>
+    <span ref={ref} className={classNames(cls.Container, mods, [])} {...restProps}>
      {children} 
     </span>
   )
-}
+})

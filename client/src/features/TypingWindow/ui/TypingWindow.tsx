@@ -1,5 +1,6 @@
 import { KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { CustomSpan } from './CustomSpan/CustomSpan'
+import { SlidingCursor } from './SlidingCursor'
 import cls from './TypingWindow.module.scss'
 import { classNames } from '@/shared/lib/classNames/classNames'
 
@@ -38,6 +39,7 @@ export function TypingWindow(props: TypingWindowProps) {
   const [correctedIndexes, setCorrectedIndexes] = useState(new Set<number>());
   const [isFocusOnDiv, setIsFocusOnDiv] = useState(false);
   const [isFirstKeyPressed, setIsFirstKeyPressed] = useState(false);
+  const [cursorPosition, setCursorPosition] = useState({ left: 0, top: 0 });
  
   const spanRefs = useRef<(HTMLSpanElement | null)[]>([])
   const containerRef = useRef<HTMLDivElement | null>(null) // Ref for the scrolling containerRef
@@ -63,6 +65,22 @@ export function TypingWindow(props: TypingWindowProps) {
 
   useEffect(() => {
     updateKeyboardHelperActiveKey && updateKeyboardHelperActiveKey(typingText[currentLetterIndex])
+  }, [currentLetterIndex])
+
+  // Update cursor position when currentLetterIndex changes
+  useEffect(() => {
+    const currentSpan = spanRefs.current[currentLetterIndex];
+    const container = containerRef.current;
+    
+    if (currentSpan && container) {
+      const containerRect = container.getBoundingClientRect();
+      const spanRect = currentSpan.getBoundingClientRect();
+      
+      setCursorPosition({
+        left: spanRect.left - containerRect.left,
+        top: spanRect.top - containerRect.top
+      });
+    }
   }, [currentLetterIndex])
 
   // Add global keyboard listener to restore focus when typing window is not focused
@@ -171,12 +189,15 @@ export function TypingWindow(props: TypingWindowProps) {
         tabIndex={0}
         onKeyDown={onKeyDownHandler}
       >
+        {/* Sliding cursor */}
+        <SlidingCursor position={cursorPosition} isSessionStarted={isFirstKeyPressed} />
+        
         {[...typingText, ...filler].map((el, index) => (
           <CustomSpan
             key={index}
-            /* @ts-ignore */
             ref={(el: HTMLSpanElement) => (spanRefs.current[index] = el)} // Assign ref
-            isPointerOn={index === currentLetterIndex }
+            isPointerOn={false} // Remove individual pointer logic
+            /* isPointerOn={index === currentLetterIndex } */
             isTyped={currentLetterIndex <= index}
             isMistakenKey={mistakenIndexes.has(index)} // Check if this index was mistaken
             isCorrectedMistake={correctedIndexes.has(index)} // Check if this mistake was corrected
