@@ -1,5 +1,5 @@
 export const getMockedTypingText = (): string[] => {
-  let text = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium, minus?"
+  let text = "Practice makes progress. Type with purpose, focus, and consistency."
 
   let convertedToArray = text.split('')
   return convertedToArray
