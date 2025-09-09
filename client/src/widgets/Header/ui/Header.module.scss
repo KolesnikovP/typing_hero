@@ -1,8 +1,8 @@
 .Header {
     width: 100%;
     height: var(--navbar-height);
-    /* background: var(--inverted-bg-color); */
-    background: gray;
+    background: var(--bg-color);
+    border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.15);
     display: flex;
     justify-content: space-between;
     align-items: center;

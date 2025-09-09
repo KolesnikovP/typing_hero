@@ -1,0 +1,99 @@
+:root {
+  /* Default to light theme */
+  /* Canvas */
+  --bg-color: #ffffff;
+  --bg-color-rgb: 255, 255, 255;
+
+  /* Inverted (for inverted buttons/areas) - GitHub dark base */
+  --inverted-bg-color: #0d1117;
+
+  /* Typography */
+  --primary-color: #24292f; /* fg default */
+  --primary-color-rgb: 36, 41, 47;
+
+  --secondary-color: #57606a; /* fg muted */
+  --secondary-color-rgb: 87, 96, 106;
+
+  /* Inverted text colors on dark backgrounds */
+  --inverted-primary-color: #c9d1d9;
+  --inverted-secondary-color: #0969da; /* accent */
+
+  /* Skeleton */
+  --skeleton-color: #f6f8fa;
+  --skeleton-shadow: rgba(0 0 0 / 20%);
+
+  /* Code / surfaces */
+  --code-bg: #f6f8fa;
+
+  /* Cards and containers */
+  --card-bg: #f6f8fa; /* subtle background */
+
+  /* Lists, dropdowns */
+  --listbox-bg: #ffffff;
+}
+
+:root[data-theme='light'] {
+  /* Canvas */
+  --bg-color: #ffffff;
+  --bg-color-rgb: 255, 255, 255;
+
+  /* Inverted (for inverted buttons/areas) - GitHub dark base */
+  --inverted-bg-color: #0d1117;
+
+  /* Typography */
+  --primary-color: #24292f; /* fg default */
+  --primary-color-rgb: 36, 41, 47;
+
+  --secondary-color: #57606a; /* fg muted */
+  --secondary-color-rgb: 87, 96, 106;
+
+  /* Inverted text colors on dark backgrounds */
+  --inverted-primary-color: #c9d1d9;
+  --inverted-secondary-color: #0969da; /* accent */
+
+  /* Skeleton */
+  --skeleton-color: #f6f8fa;
+  --skeleton-shadow: rgba(0 0 0 / 20%);
+
+  /* Code / surfaces */
+  --code-bg: #f6f8fa;
+
+  /* Cards and containers */
+  --card-bg: #f6f8fa; /* subtle background */
+
+  /* Lists, dropdowns */
+  --listbox-bg: #ffffff;
+}
+
+:root[data-theme='dark'] {
+  /* Canvas */
+  --bg-color: #0d1117;
+  --bg-color-rgb: 13, 17, 23;
+
+  /* Inverted (for inverted buttons/areas) - GitHub light base */
+  --inverted-bg-color: #ffffff;
+
+  /* Typography */
+  --primary-color: #c9d1d9; /* fg default */
+  --primary-color-rgb: 201, 209, 217;
+
+  --secondary-color: #8b949e; /* fg muted */
+  --secondary-color-rgb: 139, 148, 158;
+
+  /* Inverted text colors on light backgrounds */
+  --inverted-primary-color: #24292f;
+  --inverted-secondary-color: #58a6ff; /* accent */
+
+  /* Skeleton */
+  --skeleton-color: #161b22;
+  --skeleton-shadow: rgba(0 0 0 / 35%);
+
+  /* Code / surfaces */
+  --code-bg: #161b22;
+
+  /* Cards and containers */
+  --card-bg: #161b22; /* subtle background */
+
+  /* Lists, dropdowns */
+  --listbox-bg: #161b22;
+}

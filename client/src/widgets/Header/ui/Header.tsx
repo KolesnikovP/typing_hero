@@ -9,6 +9,7 @@ import { LoginModal } from '@/features/AuthByUsername'
 import { useSelector } from 'react-redux'
 import { getUserAuthData, userActions } from '@/entities/User'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
+import { ThemeToggle } from '@/features/ThemeToggle';
 
 export const Header = () => {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
@@ -37,11 +38,12 @@ export const Header = () => {
         </div>
         <div className={cls.HeaderItem}>
           <Button theme='clear' className={cls.MenuItem}>
-            <Icon Svg={BellIcon}/>
+            <Icon Svg={BellIcon} width={24} height={24} />
           </Button>
+          <ThemeToggle className={cls.MenuItem} />
           <LoginModal isOpen={isAuthModalOpen} onClose={onAuthCloseModal}/>
           <DropdownMenu
-            buttonContent={<Icon Svg={UserIcon}/>}
+            buttonContent={<Icon Svg={UserIcon} width={26} height={26} />}
             items={[
               { id: 'home', label: 'Home', href: '/' },
               { id: 'profile', label: 'Profile', href: '/profile' },
@@ -66,11 +68,12 @@ export const Header = () => {
         </div>
         <div className={cls.HeaderItem}>
           <Button theme='clear' className={cls.MenuItem}>
-            <Icon Svg={BellIcon}/>
+            <Icon Svg={BellIcon} width={30} height={30} />
           </Button>
+          <ThemeToggle className={cls.MenuItem} />
           <LoginModal isOpen={isAuthModalOpen} onClose={onAuthCloseModal}/>
           <Button theme='clear' onClick={onAuthShowModal}>
-            <Icon Svg={UserIcon}/>
+            <Icon Svg={UserIcon} width={30} height={30} />
           </Button>
         </div>
       </header>

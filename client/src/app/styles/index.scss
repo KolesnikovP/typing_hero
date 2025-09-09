@@ -1,8 +1,6 @@
 @use "reset";
 @use "variables/global";
-/* @import "themes/normal"; */
-@use "themes/dark";
-/* @import "themes/orange"; */
+@use "themes/switchable";
 
 .app,
 .app_modal,
@@ -37,4 +35,3 @@
     border-radius: 20px;       /* закругления плашки */
     border: 2px solid var(--primary-color);  /* padding вокруг плашки */
 }
-
