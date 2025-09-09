@@ -9,7 +9,8 @@ export type ButtonTheme = 'clear'
     |'outline'
     |'outline_red'
     |'background'
-    |'backgroundInverted';
+    |'backgroundInverted'
+    |'primary';
 
 export type ButtonSize = 'size_m' | 'size_l' | 'size_xl'
 
@@ -72,4 +73,3 @@ export const Button = memo((props: ButtonProps) => {
         </button>
     );
 });
-

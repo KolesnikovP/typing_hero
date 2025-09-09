@@ -26,4 +26,4 @@ Scope: entire repository.
   - Keep changes minimal and focused; avoid unrelated refactors.
   - Prefer configuration via env over hard-coded values.
   - Update README if deployment or env behavior changes.
-
+  - When changing UI styles, strive to follow GitHub website style (spacing, colors, typography) using our existing theme variables.

@@ -94,7 +94,7 @@ export default function ProfilePage() {
                 />
                 {!isEditing && (
                     <Button
-                        theme="outline"
+                        theme="primary"
                         onClick={handleEdit}
                         className={cls.editButton}
                     >
@@ -170,14 +170,14 @@ export default function ProfilePage() {
 
                         <div className={cls.actions}>
                             <Button
-                                theme="clear"
+                                theme="background"
                                 onClick={handleCancel}
                                 disabled={isLoading}
                             >
                                 Cancel
                             </Button>
                             <Button
-                                theme="outline"
+                                theme="primary"
                                 onClick={handleSave}
                                 disabled={isLoading}
                             >
@@ -241,4 +241,3 @@ export default function ProfilePage() {
         </div>
     );
 }
-

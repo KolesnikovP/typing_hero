@@ -56,6 +56,22 @@
     border: none;
 }
 
+/* GitHub-like primary action button */
+.primary {
+  background: var(--inverted-secondary-color); /* accent */
+  color: var(--inverted-primary-color);
+  border: 1px solid transparent;
+  border-radius: 6px;
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+
+  &:active {
+    filter: brightness(0.9);
+  }
+}
+
 .square {
     padding: 0;
 }
