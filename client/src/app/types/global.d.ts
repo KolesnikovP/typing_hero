@@ -16,9 +16,16 @@ declare module '*.svg' {
     export default SVG;
 }
 
+interface ImportMetaEnv {
+    readonly VITE_API_URL?: string;
+    readonly VITE_GOOGLE_CLIENT_ID: string;
+}
+interface ImportMeta {
+    readonly env: ImportMetaEnv;
+}
+
 declare const __IS_DEV__: boolean;
-declare const __API__: string;
-declare const __PROJECT__: 'storybook' | 'frontend' | 'jest';
+declare const __PROJECT__: 'frontend' | 'storybook' | 'test';
 
 type DeepPartial<T> = T extends object ? {
     [P in keyof T]?: DeepPartial<T[P]>;
@@ -27,4 +34,3 @@ type DeepPartial<T> = T extends object ? {
 type OptionalRecord<K extends keyof any, T> = {
     [P in K]?: T;
 };
-

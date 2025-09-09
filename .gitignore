@@ -79,6 +79,15 @@ web_modules/
 .env.production.local
 .env.local
 
+# Go backend build artifacts and local DBs
+backend/src/typing_hero/typing_hero
+backend/src/typing_hero/*.db
+backend/src/typing_hero/*.sqlite
+
+# Explicitly ignore local envs in subfolders
+client/.env
+backend/src/typing_hero/.env
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache

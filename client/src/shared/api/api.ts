@@ -1,8 +1,11 @@
 import axios from 'axios';
 import { USER_LOCALSTORAGE_KEY } from '@/shared/const/localstorage';
 
+// Prefer VITE_API_URL when provided, otherwise default to same-origin '/api'.
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
+
 export const $api = axios.create({
-    baseURL: __API__,
+    baseURL: API_BASE,
 });
 
 $api.interceptors.request.use((config) => {

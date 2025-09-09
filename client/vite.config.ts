@@ -22,10 +22,15 @@ export default defineConfig({
       '@shared': path.resolve(__dirname, './src/shared'),
     }
   },
-  define: {
-    __IS_DEV__: JSON.stringify(true),
-    __API__: JSON.stringify('http://localhost:8080'),
-    __PROJECT__: JSON.stringify('frontend'),
+  // For local dev, proxy API calls to the Go backend to avoid CORS.
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
 
 })

@@ -20,7 +20,7 @@
 - **Gorilla Mux** - HTTP router and middleware
 - **Google ID Token Validation** - Secure authentication
 - **CORS middleware** - Cross-origin resource sharing
-- **In-memory user store** - User management
+- **SQLite persistence** - User and results storage
 
 ### Development Tools
 - **ESLint** - Code linting
@@ -62,7 +62,7 @@
    # Required for Google OAuth
    export GOOGLE_CLIENT_ID="<your-google-oauth-client-id>"
    # Optional overrides
-   export FRONTEND_ORIGIN="http://localhost:5173"   # CORS allowlist
+   export FRONTEND_ORIGINS="http://localhost:5173"   # CORS allowlist (comma-separated)
    export DB_PATH="typinghero.db"                    # SQLite file path
    export PORT=8080                                   # Server port
 
@@ -82,6 +82,23 @@
    cd client
    npm run start:dev:server
    ```
+
+## 🐳 Docker
+
+Build and run locally with Docker Compose:
+
+1. Create a `.env` in repo root with your Google client ID:
+   ```bash
+   echo "GOOGLE_CLIENT_ID=your-google-oauth-client-id" > .env
+   ```
+
+2. Build and start:
+   ```bash
+   docker compose up --build
+   ```
+
+   - Frontend: http://localhost:5173
+   - Backend health: http://localhost:8080/healthz
 
 ## 📁 Project Structure
 
@@ -108,10 +125,17 @@ typing_hero/
 ## 🔧 Configuration
 
 ### Environment Variables
-The application uses build-time constants defined in `vite.config.ts`:
-- `__API__`: Backend API URL (default: `http://localhost:8080`)
-- `__IS_DEV__`: Development mode flag
-- `__PROJECT__`: Project identifier
+Backend (`backend/src/typing_hero/.env`):
+- `GOOGLE_CLIENT_ID` (required): Google OAuth client ID
+- `FRONTEND_ORIGINS` (optional): Comma-separated list of allowed origins (default: `http://localhost:5173`)
+- `PORT` (optional): HTTP port (default: `8080`)
+- `DB_PATH` (optional): SQLite DB path (default: `typinghero.db`)
+
+Frontend (`client/.env`):
+- `VITE_GOOGLE_CLIENT_ID` (required): Google OAuth client ID for the web SDK
+- `VITE_API_URL` (optional): API base URL. Use `/api` when served behind the same domain via reverse proxy (default: `/api`).
+
+Vite dev server proxies `/api` → `http://localhost:8080` to avoid CORS during development.
 
 ### Google OAuth Setup
 To enable Google authentication:
