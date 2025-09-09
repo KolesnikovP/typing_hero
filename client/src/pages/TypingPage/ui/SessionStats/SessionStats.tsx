@@ -263,15 +263,19 @@ const TwoAxisGraphTest = (props: TwoAxisGraphProps) => {
               bottom: 20,
             }}
           >
-            <CartesianGrid strokeDasharray="3 5" />
-            <XAxis dataKey="interval" />
-            <YAxis orientation='left' dataKey='cpm'/> 
+            <CartesianGrid stroke={'rgba(var(--primary-color-rgb), 0.15)'} strokeDasharray="3 5" />
+            <XAxis dataKey="interval" stroke={'rgba(var(--primary-color-rgb), 0.6)'} tick={{ fill: 'rgba(var(--primary-color-rgb), 0.6)' }} />
+            <YAxis orientation='left' dataKey='cpm' stroke={'rgba(var(--primary-color-rgb), 0.6)'} tick={{ fill: 'rgba(var(--primary-color-rgb), 0.6)' }} /> 
             <Tooltip />
-            <Area type="monotone" dataKey="cpm" stroke="#8884d8" fill="#8884d8" />
+            <Area
+              type="monotone"
+              dataKey="cpm"
+              stroke={'var(--inverted-secondary-color)'}
+              fill={'rgba(var(--primary-color-rgb), 0.2)'}
+            />
           </ComposedChart>
         </ResponsiveContainer>
     </div>
 
   )
 }
-

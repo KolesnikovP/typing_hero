@@ -1,8 +1,7 @@
 .Container {
   padding: 2rem;
-  background: #f8f9fa;
+  background: var(--card-bg);
   border-radius: 12px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
@@ -16,52 +15,51 @@
 }
 
 .statCard {
-  background: white;
+  background: var(--card-bg);
   padding: 1.5rem;
   border-radius: 8px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  border: 2px solid transparent;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
   transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    background: rgba(var(--primary-color-rgb), 0.04);
   }
 }
 
 .statValue {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #2563eb;
+  color: var(--inverted-secondary-color);
   margin-bottom: 0.5rem;
 }
 
 .statLabel {
   font-size: 1rem;
   font-weight: 600;
-  color: #374151;
+  color: var(--primary-color);
   margin-bottom: 0.25rem;
 }
 
 .statTarget {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: rgba(var(--primary-color-rgb), 0.6);
   font-style: italic;
 }
 
 .statSubtext {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: rgba(var(--primary-color-rgb), 0.6);
 }
 
 
 .secondaryStats {
-  background: white;
+  background: var(--card-bg);
   border-radius: 8px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
 }
 
 .statRow {
@@ -69,32 +67,32 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.15);
 
   &:last-child {
     border-bottom: none;
   }
 
   span:first-child {
-    color: #6b7280;
+    color: rgba(var(--primary-color-rgb), 0.6);
     font-weight: 500;
   }
 
   span:last-child {
-    color: #374151;
+    color: var(--primary-color);
     font-weight: 600;
   }
 }
 
 .chartSection {
-  background: white;
+  background: var(--card-bg);
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
 
   h3 {
     margin: 0 0 1rem 0;
-    color: #374151;
+    color: var(--primary-color);
     font-size: 1.125rem;
     font-weight: 600;
   }
