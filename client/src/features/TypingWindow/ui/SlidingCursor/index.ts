@@ -1,1 +1,0 @@
-export { SlidingCursor } from './SlidingCursor';
