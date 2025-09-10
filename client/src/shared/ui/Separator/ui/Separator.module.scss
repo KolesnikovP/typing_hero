@@ -1,0 +1,10 @@
+.separator {
+  display: block;
+  height: 0.5px;
+  background-color: var(--secondary-color);
+  opacity: 0.3;
+  border: none;
+  /* Default spacing: small vertical, flush horizontal for embedding */
+  margin: 8px 0;
+}
+

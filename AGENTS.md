@@ -27,3 +27,4 @@ Scope: entire repository.
   - Prefer configuration via env over hard-coded values.
   - Update README if deployment or env behavior changes.
   - When changing UI styles, strive to follow GitHub website style (spacing, colors, typography) using our existing theme variables.
+  - Avoid inline styles; prefer SCSS modules or existing component styles.

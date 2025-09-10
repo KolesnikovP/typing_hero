@@ -6,10 +6,12 @@ import { SessionStats } from './SessionStats/SessionStats';
 import cls from './TypingPage.module.scss'
 import useAccurateCountdown from '@/shared/lib/hooks/useAccurateCountDown';
 import ReloadIcon from '@shared/assets/icons/reload.svg'
+import GearIcon from '@shared/assets/icons/gear.svg'
 import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon/ui/Icon';
 import { KeyboardHelper } from '@/features/KeyboardHelper';
 import { TimeSelector, getStoredTime, type TimeInterval } from './TimeSelector';
+import { SettingsModal } from './SettingsModal/SettingsModal';
 
 type Logs = { timestamp: number; key: string; isMistake: boolean }
 const initSessionProgress = {lettersTyped: 0, mistakesCount: 0, logs: [] as Logs[], timeWhenSessionOver: 0} 
@@ -23,6 +25,15 @@ export const TypingPage = () => {
   const [sessionResults, setSessionResults] = useState(initSessionProgress)
   const [isResultsVisible, setIsResultsVisible] = useState(false);
   const [selectedTime, setSelectedTime] = useState<TimeInterval>(getStoredTime());
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [showKeyboardHelper, setShowKeyboardHelper] = useState<boolean>(() => {
+    try {
+      const stored = localStorage.getItem('typing_hero_show_keyboard_helper');
+      return stored ? stored === 'true' : true;
+    } catch {
+      return true;
+    }
+  });
   
   const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(selectedTime);
     // Function to start the session when user types first letter
@@ -49,6 +60,14 @@ export const TypingPage = () => {
       setIsSessionStarted(false);
     }
   }, [timeLeft])
+
+  const toggleKeyboardHelper = () => {
+    setShowKeyboardHelper((prev) => {
+      const next = !prev;
+      try { localStorage.setItem('typing_hero_show_keyboard_helper', String(next)); } catch {}
+      return next;
+    });
+  };
 
   return (
     <div className={cls.TypingPage}>
@@ -89,14 +108,25 @@ export const TypingPage = () => {
               // very DEBATABLE
               updateKeyboardHelperActiveKey={updateKeyboardHelperActiveKey}
             /> 
-
-            <KeyboardHelper activeKey={keyboardHelperActiveKey}/>
-            
-            <TimeSelector 
-              selectedTime={selectedTime}
-              onTimeChange={setSelectedTime}
-              disabled={isSessionStarted}
-            />
+            {showKeyboardHelper && (
+              <KeyboardHelper activeKey={keyboardHelperActiveKey} />
+            )}
+            <div className={cls.TimeControlsRow}>
+              <TimeSelector 
+                selectedTime={selectedTime}
+                onTimeChange={setSelectedTime}
+                disabled={isSessionStarted}
+                hideLabel
+              />
+              <Button
+               className={cls.SettingsButton}
+               theme='outline'
+               aria-label="Settings" 
+               title="Settings"
+               onClick={() => setIsSettingsOpen(true)}>
+                <Icon Svg={GearIcon} width={25} height={25} />
+              </Button>
+            </div>
 
             <div className={cls.ButtonsGroup}>
               <button className={cls.Button} onClick={startCountdown}>Start</button>
@@ -104,6 +134,12 @@ export const TypingPage = () => {
             </div>
           </>
       }
+      <SettingsModal 
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        showKeyboardHelper={showKeyboardHelper}
+        onToggleKeyboardHelper={toggleKeyboardHelper}
+      />
     </div>
   )
 }

@@ -78,12 +78,9 @@
   
 }
 
-.separator {
-  height: 0.5px;
+/* Separator in menu context */
+.menuSeparator {
   margin: 8px 12px;
-  background-color: var(--secondary-color);
-  border: none;
-  opacity: 0.3;
 }
 
 .icon {

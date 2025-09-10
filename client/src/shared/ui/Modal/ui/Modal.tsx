@@ -1,6 +1,7 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'framer-motion';
 import styles from './Modal.module.scss';
+import { Separator } from '@/shared/ui/Separator';
 import { JSX } from 'react';
 
 type ModalProps = HTMLDivElement & {
@@ -38,9 +39,12 @@ function Modal(props: ModalProps) {
                     className={styles.panel}
                   >
                     {title && (
-                      <Dialog.Title className={styles.title}>
-                        {title}
-                      </Dialog.Title>
+                      <>
+                        <Dialog.Title className={styles.title}>
+                          {title}
+                        </Dialog.Title>
+                        <Separator className={styles.modalSeparator} />
+                      </>
                     )}
 
                     {description && (

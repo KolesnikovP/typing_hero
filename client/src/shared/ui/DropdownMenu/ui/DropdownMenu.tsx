@@ -2,6 +2,7 @@ import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu'
 import { ReactNode } from 'react'
 import { classNames } from '../../../lib/classNames/classNames'
 import cls from './DropdownMenu.module.scss'
+import { Separator } from '@/shared/ui/Separator'
 
 /**
  * Reusable DropdownMenu component
@@ -51,7 +52,7 @@ export const DropdownMenu = ({
 }: DropdownMenuProps) => {
   const renderMenuItem = (item: DropdownMenuItem | 'separator', index: number) => {
     if (item === 'separator') {
-      return <DropdownMenuPrimitive.Separator key={`separator-${index}`} className={cls.separator} />
+      return <Separator key={`separator-${index}`} className={cls.menuSeparator} />
     }
 
     const itemClassName = classNames(cls.menuItem, {

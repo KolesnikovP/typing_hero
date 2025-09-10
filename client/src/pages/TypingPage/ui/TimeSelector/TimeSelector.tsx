@@ -31,10 +31,11 @@ type TimeSelectorProps = HTMLAttributes<HTMLDivElement> & {
   selectedTime: TimeInterval;
   onTimeChange: (time: TimeInterval) => void;
   disabled?: boolean;
+  hideLabel?: boolean;
 }
 
 export const TimeSelector = (props: TimeSelectorProps) => {
-  const { selectedTime, onTimeChange, disabled = false, className, ...otherProps } = props;
+  const { selectedTime, onTimeChange, disabled = false, hideLabel = false, className, ...otherProps } = props;
 
   const handleTimeChange = (time: TimeInterval) => {
     if (!disabled) {
@@ -45,7 +46,9 @@ export const TimeSelector = (props: TimeSelectorProps) => {
 
   return (
     <div className={`${cls.TimeSelector} ${className || ''}`} {...otherProps}>
-      <div className={cls.TimeSelectorLabel}>Session Duration:</div>
+      {!hideLabel && (
+        <div className={cls.TimeSelectorLabel}>Session Duration:</div>
+      )}
       <div className={cls.TimeButtons}>
         {TIME_INTERVALS.map((time) => (
           <button

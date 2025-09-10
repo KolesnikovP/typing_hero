@@ -1,0 +1,18 @@
+.SettingsContent {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.SettingRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+}
+
+.ToggleLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
