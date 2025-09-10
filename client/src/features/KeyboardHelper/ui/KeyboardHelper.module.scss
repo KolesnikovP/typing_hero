@@ -3,18 +3,12 @@
   flex-direction: column-reverse;
   justify-content: center;
   align-items: center;
-  border: 1px solid white;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
   padding: 5px;
   min-height: 40px;
   min-width: 40px;
   max-width: 50px;
   max-height: 50px;
-    .symbol:first-child {
-      /* color: red; */
-  }
-    .symbol:only-child {
-     /* color: white;  */
-  }
 }
 
 .KeyboardContainer {
@@ -44,16 +38,19 @@
   justify-content: center;
   align-items: center;
   padding: 4px 6px;
-  background: #eaeaea;
-  border-radius: 4px;
+  background: var(--card-bg);
+  color: var(--secondary-color);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  border-radius: 6px;
   width: 50px;
   height: 50px;
-
+  box-sizing: border-box;
 }
 
 .key.activeKey {
-  background: blue;
-  color: white;
+  background: var(--inverted-secondary-color);
+  border-color: transparent;
+  color: var(--inverted-primary-color);
 }
 
 .sm {
@@ -83,7 +80,8 @@
 .symbol {
   font-size: var(--font-size-m);
   line-height: 1;
-  padding-top: 3px
+  padding-top: 3px;
+  color: inherit;
 }
 
 
@@ -101,7 +99,7 @@
   
   .key {
     padding: 4px 6px;
-    border-radius: 4px;
+    border-radius: 6px;
     width: 40px;
     height: 40px;
   }
@@ -154,7 +152,7 @@
   
   .key {
     padding: 4px 6px;
-    border-radius: 4px;
+    border-radius: 6px;
     width: 40px;
     height: 40px;
   }
