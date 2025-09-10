@@ -5,12 +5,28 @@
   height: 100vh;
 }
 
+.TopBar {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  --control-height: 36px;
+}
+
+.TopBarControls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .TimeControlsRow {
   width: 100%;
   max-width: 700px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   gap: 6px;
   /* Unified control height for TimeSelector buttons and Settings button */
   --control-height: 36px;

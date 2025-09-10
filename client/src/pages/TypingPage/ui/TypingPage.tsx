@@ -96,8 +96,24 @@ export const TypingPage = () => {
           </div>
           :
           <>
-            <div>
-              <Timer timeLeft={Number(timeLeft.toFixed(1))}/>
+            <div className={cls.TopBar}>
+              <Timer timeLeft={Number(timeLeft.toFixed(1))} />
+              <div className={cls.TopBarControls}>
+                <TimeSelector 
+                  selectedTime={selectedTime}
+                  onTimeChange={setSelectedTime}
+                  disabled={isSessionStarted}
+                  hideLabel
+                />
+                <Button
+                 className={cls.SettingsButton}
+                 theme='outline'
+                 aria-label="Settings" 
+                 title="Settings"
+                 onClick={() => setIsSettingsOpen(true)}>
+                  <Icon Svg={GearIcon} width={16} height={16} />
+                </Button>
+              </div>
             </div>
             <TypingWindow
               canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
@@ -111,22 +127,7 @@ export const TypingPage = () => {
             {showKeyboardHelper && (
               <KeyboardHelper activeKey={keyboardHelperActiveKey} />
             )}
-            <div className={cls.TimeControlsRow}>
-              <TimeSelector 
-                selectedTime={selectedTime}
-                onTimeChange={setSelectedTime}
-                disabled={isSessionStarted}
-                hideLabel
-              />
-              <Button
-               className={cls.SettingsButton}
-               theme='outline'
-               aria-label="Settings" 
-               title="Settings"
-               onClick={() => setIsSettingsOpen(true)}>
-                <Icon Svg={GearIcon} width={25} height={25} />
-              </Button>
-            </div>
+            
 
             <div className={cls.ButtonsGroup}>
               <button className={cls.Button} onClick={startCountdown}>Start</button>
