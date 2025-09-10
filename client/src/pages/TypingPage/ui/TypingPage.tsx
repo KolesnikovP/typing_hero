@@ -97,23 +97,28 @@ export const TypingPage = () => {
           :
           <>
             <div className={cls.TopBar}>
-              <Timer timeLeft={Number(timeLeft.toFixed(1))} />
-              <div className={cls.TopBarControls}>
-                <TimeSelector 
-                  selectedTime={selectedTime}
-                  onTimeChange={setSelectedTime}
-                  disabled={isSessionStarted}
-                  hideLabel
-                />
-                <Button
-                 className={cls.SettingsButton}
-                 theme='outline'
-                 aria-label="Settings" 
-                 title="Settings"
-                 onClick={() => setIsSettingsOpen(true)}>
-                  <Icon Svg={GearIcon} width={16} height={16} />
-                </Button>
-              </div>
+              {isSessionStarted && (
+                <Timer timeLeft={timeLeft} format='seconds' />
+              )}
+              {!isSessionStarted && (
+                <div className={cls.TopBarControls}>
+                  <TimeSelector 
+                    className={cls.TopBarTimeSelector}
+                    selectedTime={selectedTime}
+                    onTimeChange={setSelectedTime}
+                    disabled={isSessionStarted}
+                    hideLabel
+                  />
+                  <Button
+                   className={cls.SettingsButton}
+                   theme='outline'
+                   aria-label="Settings" 
+                   title="Settings"
+                   onClick={() => setIsSettingsOpen(true)}>
+                    <Icon Svg={GearIcon} width={16} height={16} />
+                  </Button>
+                </div>
+              )}
             </div>
             <TypingWindow
               canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}

@@ -12,7 +12,10 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 12px;
+  padding: 0 12px;
+  /* Keep a stable height equal to the control group (36px buttons + 8px padding + 1px border) */
   --control-height: 36px;
+  height: 45px;
 }
 
 .TopBarControls {
@@ -20,6 +23,7 @@
   align-items: center;
   gap: 6px;
 }
+
 
 .TimeControlsRow {
   width: 100%;
