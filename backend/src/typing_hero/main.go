@@ -84,6 +84,7 @@ func main() {
     router.HandleFunc("/user/{id}", handlers.GetUserHandler(userStore)).Methods(http.MethodGet)
     router.HandleFunc("/users/{id}", handlers.UpdateUserHandler(userStore)).Methods(http.MethodPut)
     router.HandleFunc("/users/{id}", handlers.GetUserHandler(userStore)).Methods(http.MethodGet)
+    router.HandleFunc("/texts", handlers.GenerateTextHandler()).Methods(http.MethodGet)
 
     // CORS middleware
     c := cors.New(cors.Options{

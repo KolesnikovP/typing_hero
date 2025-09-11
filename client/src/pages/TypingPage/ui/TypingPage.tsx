@@ -1,6 +1,5 @@
 import { Timer } from '@/features/Timer';
 import { TypingWindow } from '@/features/TypingWindow'
-import { getMockedTypingText } from '@/features/TypingWindow/mockText';
 import { useEffect, useState } from 'react';
 import { SessionStats } from './SessionStats/SessionStats';
 import cls from './TypingPage.module.scss'
@@ -10,32 +9,46 @@ import GearIcon from '@shared/assets/icons/gear.svg'
 import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon/ui/Icon';
 import { KeyboardHelper } from '@/features/KeyboardHelper';
-import { TimeSelector, getStoredTime, type TimeInterval } from './TimeSelector';
+import { TimeSelector, type TimeInterval } from './TimeSelector';
 import { SettingsModal } from './SettingsModal/SettingsModal';
+import { fetchText } from '@/features/TypingText/model/services/fetchText/fetchText';
+import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
+import { LS_TEXT_NUMBERS, LS_TEXT_PUNCTUATION, LS_KEYBOARD_HELPER, LS_SELECTED_TIME } from '@/shared/const/localstorage';
+import { useLocalStorage } from '@/shared/lib/hooks/useLocalStorage/useLocalStorage';
+import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader';
+import { typingTextReducer } from '@/features/TypingText/model/slice/typingTextSlice';
+import { useSelector } from 'react-redux';
+import { getTypingTextContent, getTypingTextLoading } from '@/features/TypingText/model/selectors/getTypingText';
 
 type Logs = { timestamp: number; key: string; isMistake: boolean }
 const initSessionProgress = {lettersTyped: 0, mistakesCount: 0, logs: [] as Logs[], timeWhenSessionOver: 0} 
-const mockedText = [...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText(), ...getMockedTypingText()]
 
+
+const reducers: ReducersList = {
+  typingText: typingTextReducer,
+};
 
 export const TypingPage = () => {
-  const [keyboardHelperActiveKey, setKeyboardHelperActiveKey] = useState(mockedText[0])
+  const content = useSelector(getTypingTextContent);
+  const isFetching = useSelector(getTypingTextLoading);
+  const [typingText, setTypingText] = useState<string[]>([]);
+  const [keyboardHelperActiveKey, setKeyboardHelperActiveKey] = useState('')
   const [isSessionStarted, setIsSessionStarted] = useState(false);
   const [isSessionFinished, setIsSessionFinished] = useState(false);
   const [sessionResults, setSessionResults] = useState(initSessionProgress)
   const [isResultsVisible, setIsResultsVisible] = useState(false);
-  const [selectedTime, setSelectedTime] = useState<TimeInterval>(getStoredTime());
+  const [selectedTime, setSelectedTime] = useLocalStorage<TimeInterval>(LS_SELECTED_TIME, 60 as TimeInterval);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [showKeyboardHelper, setShowKeyboardHelper] = useState<boolean>(() => {
-    try {
-      const stored = localStorage.getItem('typing_hero_show_keyboard_helper');
-      return stored ? stored === 'true' : true;
-    } catch {
-      return true;
-    }
-  });
+  const [showKeyboardHelper, setShowKeyboardHelper] = useLocalStorage<boolean>(LS_KEYBOARD_HELPER, true);
+  const [includePunctuation, setIncludePunctuation] = useLocalStorage<boolean>(LS_TEXT_PUNCTUATION, false);
+  const [includeNumbers, setIncludeNumbers] = useLocalStorage<boolean>(LS_TEXT_NUMBERS, false);
   
+  const dispatch = useAppDispatch();
   const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(selectedTime);
+
+  const requestText = () => {
+    dispatch(fetchText({ length: 30, punctuation: includePunctuation, numbers: includeNumbers }));
+  };
     // Function to start the session when user types first letter
   const handleFirstKeyPress = () => {
     if (!isSessionStarted) {
@@ -61,15 +74,32 @@ export const TypingPage = () => {
     }
   }, [timeLeft])
 
-  const toggleKeyboardHelper = () => {
-    setShowKeyboardHelper((prev) => {
-      const next = !prev;
-      try { localStorage.setItem('typing_hero_show_keyboard_helper', String(next)); } catch {}
-      return next;
-    });
-  };
+  // Initial fetch
+  useEffect(() => {
+    requestText();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const toggleKeyboardHelper = () => setShowKeyboardHelper((prev) => !prev);
+
+  const togglePunctuation = () => setIncludePunctuation((prev) => !prev);
+
+  const toggleNumbers = () => setIncludeNumbers((prev) => !prev);
+
+  // Refetch when text preferences change
+  useEffect(() => {
+    requestText();
+  }, [includePunctuation, includeNumbers]);
+
+  // Sync local array + active key when content updates
+  useEffect(() => {
+    const chars = content.split('');
+    setTypingText(chars);
+    setKeyboardHelperActiveKey(chars[0] || '');
+  }, [content]);
 
   return (
+    <DynamicModuleLoader reducers={reducers}>
     <div className={cls.TypingPage}>
       {
         isResultsVisible?
@@ -110,19 +140,29 @@ export const TypingPage = () => {
                     hideLabel
                   />
                   <Button
+                    className={cls.SettingsButton}
+                    theme='outline'
+                    aria-label="Reload text"
+                    title="Reload text"
+                    onClick={requestText}
+                    disabled={isFetching}
+                  >
+                    <Icon Svg={ReloadIcon} width={22} height={22} />
+                  </Button>
+                  <Button
                    className={cls.SettingsButton}
                    theme='outline'
                    aria-label="Settings" 
                    title="Settings"
                    onClick={() => setIsSettingsOpen(true)}>
-                    <Icon Svg={GearIcon} width={16} height={16} />
+                    <Icon Svg={GearIcon} width={22} height={22} />
                   </Button>
                 </div>
               )}
             </div>
             <TypingWindow
               canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
-              typingText={mockedText}
+              typingText={typingText}
               onFirstKeyPress={handleFirstKeyPress}
               isSessionFinished={isSessionFinished}
               onSessionFinish={onSessionFinish}
@@ -145,7 +185,12 @@ export const TypingPage = () => {
         onClose={() => setIsSettingsOpen(false)}
         showKeyboardHelper={showKeyboardHelper}
         onToggleKeyboardHelper={toggleKeyboardHelper}
+        includePunctuation={includePunctuation}
+        onTogglePunctuation={togglePunctuation}
+        includeNumbers={includeNumbers}
+        onToggleNumbers={toggleNumbers}
       />
     </div>
+    </DynamicModuleLoader>
   )
 }

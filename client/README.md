@@ -52,3 +52,7 @@ export default tseslint.config({
   },
 })
 ```
+
+## TypeScript Config Layout
+
+See TSCONFIGS.md for how `tsconfig.json`, `tsconfig.app.json`, and `tsconfig.node.json` are structured and when to use each.

@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Button } from '@/shared/ui/Button';
 import { Icon } from '@/shared/ui/Icon/ui/Icon';
 import SunIcon from '@shared/assets/icons/sun2.svg';
 import MoonIcon from '@shared/assets/icons/moon.svg';
 import { LOCAL_STORAGE_THEME_KEY } from '@/shared/const/localstorage';
+import { useLocalStorage } from '@/shared/lib/hooks/useLocalStorage/useLocalStorage';
 
 type Theme = 'light' | 'dark';
 
@@ -17,19 +18,16 @@ const getInitialTheme = (): Theme => {
 interface ThemeToggleProps { className?: string }
 
 export const ThemeToggle = ({ className }: ThemeToggleProps) => {
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useLocalStorage<Theme>(LOCAL_STORAGE_THEME_KEY, getInitialTheme());
 
   useEffect(() => {
-    const initial = getInitialTheme();
-    setTheme(initial);
-    document.documentElement.setAttribute('data-theme', initial);
-  }, []);
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
 
   const toggleTheme = () => {
     const next: Theme = theme === 'light' ? 'dark' : 'light';
     setTheme(next);
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem(LOCAL_STORAGE_THEME_KEY, next);
   };
 
   const isLight = theme === 'light';

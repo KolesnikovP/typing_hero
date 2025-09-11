@@ -137,6 +137,19 @@ Frontend (`client/.env`):
 
 Vite dev server proxies `/api` → `http://localhost:8080` to avoid CORS during development.
 
+## Text Generation API
+
+- `GET /api/texts`
+  - Query params:
+    - `length` (int, optional, default `30`): approximate number of words.
+    - `punctuation` (bool, optional, default `false`): include punctuation.
+    - `numbers` (bool, optional, default `false`): include numeric tokens.
+  - Response:
+    - `{ id: string, content: string, options: { length, punctuation, numbers }, source: "generated", language: "en" }`
+  - Notes:
+    - Designed for extension (e.g., difficulty, language, quote sources).
+    - In dev, call via the frontend dev server at `/api/texts`.
+
 ### Google OAuth Setup
 To enable Google authentication:
 1. Create a Google Cloud project

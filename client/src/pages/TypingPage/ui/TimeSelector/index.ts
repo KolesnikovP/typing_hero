@@ -1,2 +1,2 @@
-export { TimeSelector, getStoredTime } from './TimeSelector';
+export { TimeSelector } from './TimeSelector';
 export type { TimeInterval } from './TimeSelector';

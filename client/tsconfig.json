@@ -1,19 +1,12 @@
 {
+  // Base shared settings and project references
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    // ... your other compiler options
     "baseUrl": ".",
-    "target": "es5",
-    "jsx": "react-jsx",
-    // Компилятор будет обрабатывать не только TS файлы, но и JS файлы
-    "allowJs": true,
-    "strict": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
     "paths": {
       "@/*": ["src/*"],
       "@app/*": ["src/app/*"],
@@ -21,18 +14,10 @@
       "@widgets/*": ["src/widgets/*"],
       "@features/*": ["src/features/*"],
       "@entities/*": ["src/entities/*"],
-      "@shared/*": ["src/shared/*"],
+      "@shared/*": ["src/shared/*"]
     },
-  },
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  },
-  "include": [
-    "./config/jest/setupTests.ts",
-    "./src/**/*.ts",
-    "./src/**/*.tsx"
-  ]
-
+    "strict": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  }
 }

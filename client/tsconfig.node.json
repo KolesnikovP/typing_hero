@@ -1,26 +1,14 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "composite": true,
     "target": "ES2020",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "jsx": "react-jsx",
-
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@app/*": ["src/app/*"],
-      "@pages/*": ["src/pages/*"],
-      "@widgets/*": ["src/widgets/*"],
-      "@features/*": ["src/features/*"],
-      "@entities/*": ["src/entities/*"],
-      "@shared/*": ["src/shared/*"]
-    },
-
-    "strict": true,
-    "skipLibCheck": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "moduleDetection": "force"
+    "moduleResolution": "node",
+    "types": ["node"],
+    "lib": ["ES2020"]
   },
-  "include": ["src", "vite-env.d.ts"]
+  "include": [
+    "vite.config.ts"
+  ]
 }

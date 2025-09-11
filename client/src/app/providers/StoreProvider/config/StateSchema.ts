@@ -9,6 +9,7 @@ import { UserSchema } from '@/entities/User';
 // import { UISchema } from '@/features/UI';
 import { rtkApi } from '@/shared/api/rtkApi';
 // import { ProfileSchema } from '@/features/editableProfileCard';
+import { TypingTextSchema } from '@/features/TypingText/model/types/typingTextSchema';
 
 export interface StateSchema {
     // counter: CounterSchema;
@@ -19,6 +20,7 @@ export interface StateSchema {
     // Асинхронные редюсеры
     loginForm?: LoginSchema;
     // profile?: ProfileSchema;
+    typingText?: TypingTextSchema;
 }
 
 export type StateSchemaKey = keyof StateSchema;
@@ -47,4 +49,3 @@ export interface ThunkConfig<T> {
     extra: ThunkExtraArg;
     state: StateSchema;
 }
-

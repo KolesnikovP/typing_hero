@@ -18,3 +18,19 @@ type TypingResult struct {
 	Duration  int     `json:"duration"` // Duration in seconds
 	Timestamp string  `json:"timestamp"`
 }
+
+// TextOptions capture generation parameters for a typing text
+type TextOptions struct {
+    Length      int  `json:"length"`      // number of words (approx)
+    Punctuation bool `json:"punctuation"` // include punctuation
+    Numbers     bool `json:"numbers"`     // include numbers
+}
+
+// TextResponse is the response payload for a generated text
+type TextResponse struct {
+    ID       string      `json:"id"`
+    Content  string      `json:"content"`
+    Options  TextOptions `json:"options"`
+    Source   string      `json:"source"`   // e.g., "generated"
+    Language string      `json:"language"` // reserved for future
+}
