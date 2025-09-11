@@ -6,9 +6,9 @@ import {
 } from './StateSchema';
 
 export function createReducerManager(initialReducers: ReducersMapObject<StateSchema>): ReducerManager {
-    const reducers = { ...initialReducers };
+    const reducers: ReducersMapObject<StateSchema> = { ...initialReducers } as ReducersMapObject<StateSchema>;
 
-    let combinedReducer = combineReducers(reducers);
+    let combinedReducer: Reducer<StateSchema> = combineReducers(reducers as any) as unknown as Reducer<StateSchema>;
 
     let keysToRemove: Array<StateSchemaKey> = [];
     const mountedReducers: MountedReducers = {};
@@ -30,21 +30,23 @@ export function createReducerManager(initialReducers: ReducersMapObject<StateSch
             if (!key || reducers[key]) {
                 return;
             }
-            reducers[key] = reducer;
+            // Assign reducer for the dynamic key
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (reducers as any)[key] = reducer;
             mountedReducers[key] = true;
 
-            combinedReducer = combineReducers(reducers);
+            combinedReducer = combineReducers(reducers as any) as unknown as Reducer<StateSchema>;
         },
         remove: (key: StateSchemaKey) => {
             if (!key || !reducers[key]) {
                 return;
             }
-            delete reducers[key];
+            // delete dynamic reducer and mark for removal
+            delete (reducers as Partial<ReducersMapObject<StateSchema>>)[key];
             keysToRemove.push(key);
             mountedReducers[key] = false;
 
-            combinedReducer = combineReducers(reducers);
+            combinedReducer = combineReducers(reducers as any) as unknown as Reducer<StateSchema>;
         },
     };
 }
-

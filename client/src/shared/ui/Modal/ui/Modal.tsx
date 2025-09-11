@@ -1,8 +1,9 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'framer-motion';
-import styles from './Modal.module.scss';
+import cls from './Modal.module.scss';
 import { Separator } from '@/shared/ui/Separator';
 import { JSX } from 'react';
+import { classNames } from '@/shared/lib/classNames/classNames';
 
 type ModalProps = {
   title?: string;
@@ -11,10 +12,11 @@ type ModalProps = {
   isOpen: boolean;
   onClose: () => void;
   lazy?: boolean; // For compatibility with existing usage
+  className?: string;
 }
 
 function Modal(props: ModalProps) {
-  const {title, description, isOpen, onClose, children} = props;
+  const {title, description, isOpen, onClose, children, className} = props;
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -27,28 +29,28 @@ function Modal(props: ModalProps) {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className={styles.overlay}
+                  className={cls.overlay}
                 />
               </Dialog.Overlay>
-              <div className={styles.container}>
+              <div className={classNames(cls.container, {}, [className])}>
                 <Dialog.Content asChild>
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className={styles.panel}
+                    className={cls.panel}
                   >
                     {title && (
                       <>
-                        <Dialog.Title className={styles.title}>
+                        <Dialog.Title className={cls.title}>
                           {title}
                         </Dialog.Title>
-                        <Separator className={styles.modalSeparator} />
+                        <Separator className={cls.modalSeparator} />
                       </>
                     )}
 
                     {description && (
-                      <Dialog.Description className={styles.description}>
+                      <Dialog.Description className={cls.description}>
                         {description} 
                       </Dialog.Description>
                     )}

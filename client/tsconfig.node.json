@@ -6,7 +6,8 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "types": ["node"],
-    "lib": ["ES2020"]
+    "lib": ["ES2020"],
+    "noEmit": true
   },
   "include": [
     "vite.config.ts"
