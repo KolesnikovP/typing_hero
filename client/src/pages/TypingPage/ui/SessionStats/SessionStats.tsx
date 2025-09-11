@@ -116,11 +116,7 @@ export const SessionStats = (props : SessionStatsProps) => {
           <div className={cls.statSubtext}>Average sustained speed</div>
         </div>
         
-        <div className={cls.statCard}>
-          <div className={cls.statValue}>{advancedStats.errorRate}</div>
-          <div className={cls.statLabel}>Errors/min</div>
-          <div className={cls.statTarget}>Lower is better</div>
-        </div>
+        {/* Intentionally hiding Errors/min to avoid demotivation. Still tracked internally. */}
       </div>
 
 
