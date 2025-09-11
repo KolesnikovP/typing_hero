@@ -4,10 +4,10 @@ import styles from './Modal.module.scss';
 import { Separator } from '@/shared/ui/Separator';
 import { JSX } from 'react';
 
-type ModalProps = HTMLDivElement & {
+type ModalProps = {
   title?: string;
   description?: string;
-  children: JSX.Element;
+  children?: React.ReactNode;
   isOpen: boolean;
   onClose: () => void;
   lazy?: boolean; // For compatibility with existing usage
