@@ -76,6 +76,9 @@
    npm run dev
    ```
    The frontend will run on `http://localhost:5173`
+   - Login page: `http://localhost:5173/login`
+   - Signup page: `http://localhost:5173/signup`
+   - The header user icon routes to `/login`.
 
 3. **Optional: Start JSON server for development**
    ```bash
@@ -157,6 +160,13 @@ To enable Google authentication:
 3. Set `VITE_GOOGLE_CLIENT_ID` in the frontend env (e.g., `client/.env`) and set `GOOGLE_CLIENT_ID` in the backend environment. The backend will look for `.env` in:
    - `backend/src/typing_hero/.env` (recommended)
    - Or parent dirs if you run from another working dir (it tries `../.env`, `../../.env`, `../../../.env`).
+
+### Local Auth (optional)
+In addition to Google, the backend supports simple local registration and login. The UI exposes this via `/login` and `/signup` pages.
+- `POST /api/register` with `{ email, password, username?, name? }` → creates a user (password stored as bcrypt hash). If `username` is omitted, the local-part of email is used by default.
+- `POST /api/login` with `{ identifier, password }` where `identifier` is either email or username
+
+Note: Other endpoints do not enforce auth yet; this is intended for basic flows and local testing.
 
 ## 🤝 Contributing
 

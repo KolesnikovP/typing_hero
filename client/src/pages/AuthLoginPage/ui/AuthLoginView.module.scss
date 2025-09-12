@@ -1,0 +1,27 @@
+.Container {
+  margin: 56px auto 0;
+  display: flex;
+  justify-content: center;
+}
+
+.Box {
+  width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.GoogleRow {
+  display: flex;
+  justify-content: center;
+}
+
+.FooterRow {
+  margin-top: 4px;
+}
+
+.Link {
+  color: var(--secondary-color);
+  text-decoration: underline;
+}
+

@@ -79,6 +79,9 @@ web_modules/
 .env.production.local
 .env.local
 
+# macOS Finder
+.DS_Store
+
 # Go backend build artifacts and local DBs
 backend/src/typing_hero/typing_hero
 backend/src/typing_hero/*.db

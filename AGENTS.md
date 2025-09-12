@@ -12,6 +12,8 @@ Scope: entire repository.
   - Use `import.meta.env` for config; prefer `VITE_API_URL` and default to `'/api'`.
   - Vite dev server proxies `/api` to backend on `http://localhost:8080`.
   - Don’t introduce global define flags (`__API__`, `__IS_DEV__`), use `import.meta.env.DEV`.
+  - UI copy: use English only; do not mix languages in strings.
+  - Handlers: avoid complex inline callbacks. If an inline handler exceeds ~100 chars (e.g., `onClick`), extract it into a named function (preferably wrapped with `useCallback`) and call that instead.
 
 - Backend conventions
   - SQLite file controlled by `DB_PATH`; do not commit `.db` files or built binaries.

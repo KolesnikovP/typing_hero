@@ -8,6 +8,7 @@ import (
     _ "github.com/mattn/go-sqlite3" // SQLite driver
 
     "github.com/KolesnikovP/typing_hero/models"
+    "golang.org/x/crypto/bcrypt"
 )
 
 // UserStore now interacts with the SQLite database
@@ -43,7 +44,8 @@ func createTables(db *sql.DB) error {
         email TEXT UNIQUE,
         name TEXT,
         username TEXT,
-        avatar TEXT
+        avatar TEXT,
+        password_hash TEXT
     );`
 
     _, err := db.Exec(usersTableSQL)
@@ -55,6 +57,7 @@ func createTables(db *sql.DB) error {
     // Add missing columns if they don't exist. Ignore errors if they already exist.
     _, _ = db.Exec("ALTER TABLE users ADD COLUMN username TEXT")
     _, _ = db.Exec("ALTER TABLE users ADD COLUMN avatar TEXT")
+    _, _ = db.Exec("ALTER TABLE users ADD COLUMN password_hash TEXT")
 
 	resultsTableSQL := `
 	CREATE TABLE IF NOT EXISTS results (
@@ -118,6 +121,32 @@ func (s *UserStore) GetUserByID(id string) (*models.User, error) {
             return nil, fmt.Errorf("user not found")
         }
         return nil, fmt.Errorf("failed to query user by ID: %w", err)
+    }
+    return user, nil
+}
+
+// GetUserByUsername retrieves a user by username (without password fields)
+func (s *UserStore) GetUserByUsername(username string) (*models.User, error) {
+    row := s.Db.QueryRow("SELECT id, email, name, COALESCE(username, ''), COALESCE(avatar, '') FROM users WHERE username = ?", username)
+    user := &models.User{}
+    if err := row.Scan(&user.ID, &user.Email, &user.Name, &user.Username, &user.Avatar); err != nil {
+        if err == sql.ErrNoRows {
+            return nil, fmt.Errorf("user not found")
+        }
+        return nil, fmt.Errorf("failed to query user by username: %w", err)
+    }
+    return user, nil
+}
+
+// GetUserByEmail retrieves a user by email (without password fields)
+func (s *UserStore) GetUserByEmail(email string) (*models.User, error) {
+    row := s.Db.QueryRow("SELECT id, email, name, COALESCE(username, ''), COALESCE(avatar, '') FROM users WHERE email = ?", email)
+    user := &models.User{}
+    if err := row.Scan(&user.ID, &user.Email, &user.Name, &user.Username, &user.Avatar); err != nil {
+        if err == sql.ErrNoRows {
+            return nil, fmt.Errorf("user not found")
+        }
+        return nil, fmt.Errorf("failed to query user by email: %w", err)
     }
     return user, nil
 }
@@ -234,4 +263,79 @@ func extractUsernameFromEmail(email string) string {
         return email[:i]
     }
     return email
+}
+
+// CreateLocalUser creates a user with a username/password (non-Google auth)
+func (s *UserStore) CreateLocalUser(username, password, name, email string) (*models.User, error) {
+    if strings.TrimSpace(email) == "" {
+        return nil, fmt.Errorf("email is required")
+    }
+    if strings.TrimSpace(username) == "" {
+        username = extractUsernameFromEmail(email)
+    }
+    // ensure username uniqueness
+    var exists int
+    if err := s.Db.QueryRow("SELECT COUNT(1) FROM users WHERE username = ?", username).Scan(&exists); err != nil {
+        return nil, err
+    }
+    if exists > 0 {
+        return nil, conflictError{"username already exists"}
+    }
+    if strings.TrimSpace(email) != "" {
+        if err := s.Db.QueryRow("SELECT COUNT(1) FROM users WHERE email = ?", email).Scan(&exists); err != nil {
+            return nil, err
+        }
+        if exists > 0 {
+            return nil, conflictError{"email already exists"}
+        }
+    }
+
+    hash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+    if err != nil {
+        return nil, fmt.Errorf("failed to hash password: %w", err)
+    }
+
+    id := fmt.Sprintf("user-%s", username)
+    if _, err := s.Db.Exec(
+        "INSERT INTO users (id, email, name, username, avatar, password_hash) VALUES (?, ?, ?, ?, ?, ?)",
+        id, email, name, username, "", string(hash),
+    ); err != nil {
+        return nil, fmt.Errorf("failed to insert user: %w", err)
+    }
+
+    return &models.User{ID: id, Email: email, Name: name, Username: username, Avatar: ""}, nil
+}
+
+// AuthenticateLocalUser checks email-or-username + password and returns the user
+func (s *UserStore) AuthenticateLocalUser(identifier, password string) (*models.User, error) {
+    var id, email, name, uname, avatar, hash string
+    var row *sql.Row
+    if strings.Contains(identifier, "@") {
+        row = s.Db.QueryRow("SELECT id, email, name, username, COALESCE(avatar, ''), COALESCE(password_hash, '') FROM users WHERE email = ?", identifier)
+    } else {
+        row = s.Db.QueryRow("SELECT id, email, name, username, COALESCE(avatar, ''), COALESCE(password_hash, '') FROM users WHERE username = ?", identifier)
+    }
+    if err := row.Scan(&id, &email, &name, &uname, &avatar, &hash); err != nil {
+        if err == sql.ErrNoRows {
+            return nil, fmt.Errorf("invalid credentials")
+        }
+        return nil, fmt.Errorf("login query failed: %w", err)
+    }
+    if hash == "" {
+        return nil, fmt.Errorf("invalid credentials")
+    }
+    if err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password)); err != nil {
+        return nil, fmt.Errorf("invalid credentials")
+    }
+    return &models.User{ID: id, Email: email, Name: name, Username: uname, Avatar: avatar}, nil
+}
+
+// conflictError marks a 409-style conflict (e.g. duplicate username/email)
+type conflictError struct{ msg string }
+
+func (e conflictError) Error() string { return e.msg }
+
+func IsConflict(err error) bool {
+    _, ok := err.(conflictError)
+    return ok
 }

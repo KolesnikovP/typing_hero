@@ -80,6 +80,8 @@ func main() {
 
     // Auth and API routes
     router.HandleFunc("/auth/google", handlers.GoogleAuthHandler(userStore)).Methods(http.MethodPost)
+    router.HandleFunc("/login", handlers.LoginHandler(userStore)).Methods(http.MethodPost)
+    router.HandleFunc("/register", handlers.RegisterHandler(userStore)).Methods(http.MethodPost)
     router.HandleFunc("/results", handlers.SubmitResultHandler(userStore)).Methods(http.MethodPost)
     router.HandleFunc("/user/{id}", handlers.GetUserHandler(userStore)).Methods(http.MethodGet)
     router.HandleFunc("/users/{id}", handlers.UpdateUserHandler(userStore)).Methods(http.MethodPut)

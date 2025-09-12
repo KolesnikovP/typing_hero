@@ -5,23 +5,20 @@ import BellIcon from '@shared/assets/icons/bell.svg'
 import { useCallback, useState } from 'react'
 import { Button } from '@/shared/ui/Button'
 import { DropdownMenu } from '@/shared/ui/DropdownMenu'
-import { LoginModal } from '@/features/AuthByUsername'
+import { useNavigate } from 'react-router';
+import { getRouteLogin, getRouteSignup } from '@/shared/const/router';
 import { useSelector } from 'react-redux'
 import { getUserAuthData, userActions } from '@/entities/User'
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch'
 import { ThemeToggle } from '@/features/ThemeToggle';
 
 export const Header = () => {
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+  const navigate = useNavigate();
   const authData = useSelector(getUserAuthData);
   const dispatch = useAppDispatch()
 
   const onAuthShowModal = () => {
-    setIsAuthModalOpen(true)
-  }
-
-  const onAuthCloseModal = () => {
-    setIsAuthModalOpen(false)
+    navigate(getRouteLogin());
   }
 
       const onLogout = useCallback(() => {
@@ -41,7 +38,7 @@ export const Header = () => {
             <Icon Svg={BellIcon} width={24} height={24} />
           </Button>
           <ThemeToggle className={cls.MenuItem} />
-          <LoginModal isOpen={isAuthModalOpen} onClose={onAuthCloseModal}/>
+          {/* auth modal removed in favor of dedicated pages */}
           <DropdownMenu
             buttonContent={<Icon Svg={UserIcon} width={26} height={26} />}
             items={[
@@ -71,7 +68,7 @@ export const Header = () => {
             <Icon Svg={BellIcon} width={30} height={30} />
           </Button>
           <ThemeToggle className={cls.MenuItem} />
-          <LoginModal isOpen={isAuthModalOpen} onClose={onAuthCloseModal}/>
+          {/* auth modal removed in favor of dedicated pages */}
           <Button theme='clear' onClick={onAuthShowModal}>
             <Icon Svg={UserIcon} width={30} height={30} />
           </Button>

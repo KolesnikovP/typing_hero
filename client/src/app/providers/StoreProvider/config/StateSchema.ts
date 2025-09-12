@@ -3,7 +3,7 @@ import {
 } from '@reduxjs/toolkit';
 // import { CombinedState } from 'redux';
 import { AxiosInstance } from 'axios';
-import { LoginSchema } from '@/features/AuthByUsername';
+import { LoginSchema } from '@/features/AuthByIdentifier';
 import { UserSchema } from '@/entities/User';
 // import { CounterSchema } from '@/entities/Counter';
 // import { UISchema } from '@/features/UI';
