@@ -9,7 +9,7 @@ import { UserSchema } from '@/entities/User';
 // import { UISchema } from '@/features/UI';
 import { rtkApi } from '@/shared/api/rtkApi';
 // import { ProfileSchema } from '@/features/editableProfileCard';
-import { TypingTextSchema } from '@/features/TypingText/model/types/typingTextSchema';
+import { TypingTextSchema } from '@/entities/typingText';
 
 export interface StateSchema {
     // counter: CounterSchema;

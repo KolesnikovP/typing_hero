@@ -30,3 +30,17 @@ Scope: entire repository.
   - Update README if deployment or env behavior changes.
   - When changing UI styles, strive to follow GitHub website style (spacing, colors, typography) using our existing theme variables.
   - Avoid inline styles; prefer SCSS modules or existing component styles.
+  - Variable naming: use clear, descriptive names; avoid single-letter or opaque identifiers (e.g., use `prev` for state updaters, `err` for caught errors, `normalizedMessage` instead of `s`). Reserve one-letter names only for conventional loop indices.
+
+- Architecture (FSD)
+  - Organize code by business slice first (features/entities), then by layer.
+  - Layers and responsibilities:
+    - app: application init, router, providers, global styles
+    - processes: cross-page flows (optional)
+    - pages: route shells that compose widgets/features/entities (no business logic)
+    - widgets: reusable page sections (no business logic)
+    - features: user-valuable actions (encapsulate UI + state + logic)
+    - entities: domain models, state, queries, and simple UI (e.g., User)
+    - shared: design system, libs, API clients, helpers
+  - Dependency rule: imports flow top → down only; no upward or lateral imports across layers.
+  - Public API rule: import from a slice’s `index.ts` only (no deep imports).

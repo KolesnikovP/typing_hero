@@ -11,17 +11,15 @@ import { Icon } from '@/shared/ui/Icon/ui/Icon';
 import { KeyboardHelper } from '@/features/KeyboardHelper';
 import { TimeSelector, type TimeInterval } from './TimeSelector';
 import { SettingsModal } from './SettingsModal/SettingsModal';
-import { fetchText } from '@/features/TypingText/model/services/fetchText/fetchText';
+import { fetchText, typingTextReducer, getTypingTextContent, getTypingTextLoading, typingTextActions } from '@/entities/typingText';
 import { useAppDispatch } from '@/shared/lib/hooks/useAppDispatch/useAppDispatch';
 import { LS_TEXT_NUMBERS, LS_TEXT_PUNCTUATION, LS_KEYBOARD_HELPER, LS_SELECTED_TIME } from '@/shared/const/localstorage';
 import { useLocalStorage } from '@/shared/lib/hooks/useLocalStorage/useLocalStorage';
 import { DynamicModuleLoader, ReducersList } from '@/shared/lib/components/DynamicModuleLoader/DynamicModuleLoader';
-import { typingTextReducer } from '@/features/TypingText/model/slice/typingTextSlice';
 import { useSelector } from 'react-redux';
-import { getTypingTextContent, getTypingTextLoading } from '@/features/TypingText/model/selectors/getTypingText';
 
 type Logs = { timestamp: number; key: string; isMistake: boolean }
-const initSessionProgress = {lettersTyped: 0, mistakesCount: 0, logs: [] as Logs[], timeWhenSessionOver: 0} 
+const initSessionProgress = { lettersTyped: 0, mistakesCount: 0, logs: [] as Logs[], timeWhenSessionOver: 0 }
 
 
 const reducers: ReducersList = {
@@ -42,14 +40,14 @@ export const TypingPage = () => {
   const [showKeyboardHelper, setShowKeyboardHelper] = useLocalStorage<boolean>(LS_KEYBOARD_HELPER, true);
   const [includePunctuation, setIncludePunctuation] = useLocalStorage<boolean>(LS_TEXT_PUNCTUATION, false);
   const [includeNumbers, setIncludeNumbers] = useLocalStorage<boolean>(LS_TEXT_NUMBERS, false);
-  
+
   const dispatch = useAppDispatch();
   const { timeLeft, startCountdown, resetCountdown } = useAccurateCountdown(selectedTime);
-
+  
   const requestText = () => {
     dispatch(fetchText({ length: 30, punctuation: includePunctuation, numbers: includeNumbers }));
   };
-    // Function to start the session when user types first letter
+  // Function to start the session when user types first letter
   const handleFirstKeyPress = () => {
     if (!isSessionStarted) {
       setIsSessionStarted(true);
@@ -59,16 +57,16 @@ export const TypingPage = () => {
 
   const updateKeyboardHelperActiveKey = (key: string) => {
     setKeyboardHelperActiveKey(key)
-}
+  }
 
 
   const onSessionFinish = (chars: number, mistakes: number, logs: Logs[], timeWhenSessionOver: number) => {
-    setSessionResults(prev => ({...prev, lettersTyped: chars, mistakesCount: mistakes, timeWhenSessionOver: timeWhenSessionOver, logs}))
+    setSessionResults(prev => ({ ...prev, lettersTyped: chars, mistakesCount: mistakes, timeWhenSessionOver: timeWhenSessionOver, logs }))
     setIsResultsVisible(true)
   }
 
   useEffect(() => {
-    if(Number(timeLeft.toFixed(1)) === 0) {
+    if (Number(timeLeft.toFixed(1)) === 0) {
       setIsSessionFinished(true);
       setIsSessionStarted(false);
     }
@@ -100,97 +98,100 @@ export const TypingPage = () => {
 
   return (
     <DynamicModuleLoader reducers={reducers}>
-    <div className={cls.TypingPage}>
-      {
-        isResultsVisible?
-          <div className={cls.StatsContainer}>
-            <SessionStats
-              lettersTyped={sessionResults.lettersTyped}
-              mistakesCount={sessionResults.mistakesCount}
-              sessionDurationInSeconds={selectedTime}
-              timeWhenSessionOver={sessionResults.timeWhenSessionOver}
-              logs={sessionResults.logs}
-            />
-            <Button 
-              theme='clear'
-              square
-              onClick={() => {
-                setIsSessionFinished(false);
-                setIsResultsVisible(false);
-                setIsSessionStarted(false);
-                setSessionResults(initSessionProgress);
-                resetCountdown();
-              }}>
-              <Icon Svg={ReloadIcon}/> 
-            </Button>
-          </div>
-          :
-          <>
-            <div className={cls.TopBar}>
-              {isSessionStarted && (
-                <Timer timeLeft={timeLeft} format='seconds' />
-              )}
-              {!isSessionStarted && (
-                <div className={cls.TopBarControls}>
-                  <TimeSelector 
-                    className={cls.TopBarTimeSelector}
-                    selectedTime={selectedTime}
-                    onTimeChange={setSelectedTime}
-                    disabled={isSessionStarted}
-                    hideLabel
-                  />
-                  <Button
-                    className={cls.SettingsButton}
-                    theme='outline'
-                    aria-label="Reload text"
-                    title="Reload text"
-                    onClick={requestText}
-                    disabled={isFetching}
-                  >
-                    <Icon Svg={ReloadIcon} width={22} height={22} />
-                  </Button>
-                  <Button
-                   className={cls.SettingsButton}
-                   theme='outline'
-                   aria-label="Settings" 
-                   title="Settings"
-                   onClick={() => setIsSettingsOpen(true)}>
-                    <Icon Svg={GearIcon} width={22} height={22} />
-                  </Button>
-                </div>
-              )}
+      <div className={cls.TypingPage}>
+        {
+          isResultsVisible ?
+            <div className={cls.StatsContainer}>
+              <SessionStats
+                lettersTyped={sessionResults.lettersTyped}
+                mistakesCount={sessionResults.mistakesCount}
+                sessionDurationInSeconds={selectedTime}
+                timeWhenSessionOver={sessionResults.timeWhenSessionOver}
+                logs={sessionResults.logs}
+              />
+              <Button
+                theme='clear'
+                square
+                onClick={() => {
+                  dispatch(typingTextActions.resetCurrentTypingText());
+                  setIsSessionFinished(false);
+                  setIsResultsVisible(false);
+                  setIsSessionStarted(false);
+                  setSessionResults(initSessionProgress);
+                  resetCountdown();
+                }}>
+                <span>
+                  <Icon Svg={ReloadIcon} />
+                </span>
+              </Button>
             </div>
-            <TypingWindow
-              canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
-              typingText={typingText}
-              onFirstKeyPress={handleFirstKeyPress}
-              isSessionFinished={isSessionFinished}
-              onSessionFinish={onSessionFinish}
-              // very DEBATABLE
-              updateKeyboardHelperActiveKey={updateKeyboardHelperActiveKey}
-            /> 
-            {showKeyboardHelper && (
-              <KeyboardHelper activeKey={keyboardHelperActiveKey} />
-            )}
-            
+            :
+            <>
+              <div className={cls.TopBar}>
+                {isSessionStarted && (
+                  <Timer timeLeft={timeLeft} format='seconds' />
+                )}
+                {!isSessionStarted && (
+                  <div className={cls.TopBarControls}>
+                    <TimeSelector
+                      className={cls.TopBarTimeSelector}
+                      selectedTime={selectedTime}
+                      onTimeChange={setSelectedTime}
+                      disabled={isSessionStarted}
+                      hideLabel
+                    />
+                    <Button
+                      className={cls.SettingsButton}
+                      theme='outline'
+                      aria-label="Reload text"
+                      title="Reload text"
+                      onClick={requestText}
+                      disabled={isFetching}
+                    >
+                      <Icon Svg={ReloadIcon} width={22} height={22} />
+                    </Button>
+                    <Button
+                      className={cls.SettingsButton}
+                      theme='outline'
+                      aria-label="Settings"
+                      title="Settings"
+                      onClick={() => setIsSettingsOpen(true)}>
+                      <Icon Svg={GearIcon} width={22} height={22} />
+                    </Button>
+                  </div>
+                )}
+              </div>
+              <TypingWindow
+                canType={Number(timeLeft.toFixed(1)) > 0 && isSessionStarted}
+                typingText={typingText}
+                onFirstKeyPress={handleFirstKeyPress}
+                isSessionFinished={isSessionFinished}
+                onSessionFinish={onSessionFinish}
+                // very DEBATABLE
+                updateKeyboardHelperActiveKey={updateKeyboardHelperActiveKey}
+              />
+              {showKeyboardHelper && (
+                <KeyboardHelper activeKey={keyboardHelperActiveKey} />
+              )}
 
-            <div className={cls.ButtonsGroup}>
-              <button className={cls.Button} onClick={startCountdown}>Start</button>
-              <button className={cls.Button} onClick={resetCountdown}>Reset</button>
-            </div>
-          </>
-      }
-      <SettingsModal 
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-        showKeyboardHelper={showKeyboardHelper}
-        onToggleKeyboardHelper={toggleKeyboardHelper}
-        includePunctuation={includePunctuation}
-        onTogglePunctuation={togglePunctuation}
-        includeNumbers={includeNumbers}
-        onToggleNumbers={toggleNumbers}
-      />
-    </div>
+
+              <div className={cls.ButtonsGroup}>
+                <button className={cls.Button} onClick={startCountdown}>Start</button>
+                <button className={cls.Button} onClick={resetCountdown}>Reset</button>
+              </div>
+            </>
+        }
+        <SettingsModal
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+          showKeyboardHelper={showKeyboardHelper}
+          onToggleKeyboardHelper={toggleKeyboardHelper}
+          includePunctuation={includePunctuation}
+          onTogglePunctuation={togglePunctuation}
+          includeNumbers={includeNumbers}
+          onToggleNumbers={toggleNumbers}
+        />
+      </div>
     </DynamicModuleLoader>
   )
 }

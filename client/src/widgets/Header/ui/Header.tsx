@@ -31,7 +31,7 @@ export const Header = () => {
       <header className={cls.Header}>
         <div className={cls.HeaderItem}>
           <div className={cls.MenuItem}>logo</div>
-          <div className={cls.MenuItem}>settings</div>
+          {/* <div className={cls.MenuItem}>settings</div> */}
         </div>
         <div className={cls.HeaderItem}>
           <Button theme='clear' className={cls.MenuItem}>
@@ -41,6 +41,7 @@ export const Header = () => {
           {/* auth modal removed in favor of dedicated pages */}
           <DropdownMenu
             buttonContent={<Icon Svg={UserIcon} width={26} height={26} />}
+            buttonClassName={cls.IconButton}
             items={[
               { id: 'home', label: 'Home', href: '/' },
               { id: 'profile', label: 'Profile', href: '/profile' },
@@ -69,7 +70,7 @@ export const Header = () => {
           </Button>
           <ThemeToggle className={cls.MenuItem} />
           {/* auth modal removed in favor of dedicated pages */}
-          <Button theme='clear' onClick={onAuthShowModal}>
+          <Button theme='clear' className={cls.IconButton} onClick={onAuthShowModal}>
             <Icon Svg={UserIcon} width={30} height={30} />
           </Button>
         </div>

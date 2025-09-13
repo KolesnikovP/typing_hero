@@ -1,8 +1,17 @@
 import { HTMLAttributes } from 'react';
 import cls from './TimeSelector.module.scss';
+import { LS_SELECTED_TIME } from '@/shared/const/localstorage';
 
 const TIME_INTERVALS = [15, 30, 45, 60] as const;
 export type TimeInterval = typeof TIME_INTERVALS[number];
+
+export const getStoredTime = (): TimeInterval => {
+  const stored = localStorage.getItem(LS_SELECTED_TIME);
+  if (stored && TIME_INTERVALS.includes(Number(stored) as TimeInterval)) {
+    return Number(stored) as TimeInterval;
+  }
+  return 30; // default
+};
 
 // Storage is managed at the page level via useLocalStorage; this component is controlled-only.
 
