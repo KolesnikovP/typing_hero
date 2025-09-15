@@ -119,6 +119,7 @@ export const TypingPage = () => {
                   setIsSessionStarted(false);
                   setSessionResults(initSessionProgress);
                   resetCountdown();
+                  requestText(); // Fetch new text after reset
                 }}>
                 <span>
                   <Icon Svg={ReloadIcon} />
